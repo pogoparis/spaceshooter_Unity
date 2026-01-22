@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+
+    public int damage = 1;
+
     [Header("Bullet")]
     public float speed = 14f;
     public float lifeTime = 2.0f;
@@ -62,7 +65,7 @@ public class Bullet : MonoBehaviour
     {
         if (other.TryGetComponent<Enemy>(out var enemy))
         {
-            enemy.TakeHit(1);
+            enemy.TakeHit(damage);
             ReturnToPool();
         }
     }

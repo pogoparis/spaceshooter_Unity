@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &96160746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,6 +293,76 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &338907378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 338907380}
+  - component: {fileID: 338907379}
+  - component: {fileID: 338907381}
+  m_Layer: 0
+  m_Name: FormationController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &338907379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338907378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0629c65dd81adc746a09e124846430dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FormationController
+  cols: 5
+  rows: 4
+  rowSpacing: 0.9
+  colSpacing: 1.2
+  topMargin: 1.2
+  entryOutsideX: 1.2
+  entryYExtra: 0.5
+  flyInDuration: 1.2
+  arcSideOffset: 2
+  arcDownAmount: 4
+  spawnStagger: 0.3
+  rowStaggerBonus: 0.25
+  enemyPrefab: {fileID: 4002148140208487566, guid: 39eda9e37a7ef974ab57e047dba0a895, type: 3}
+--- !u!4 &338907380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338907378}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.15455, y: -2.45509, z: -1.1778}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &338907381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338907378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aef759534c35c934a88dc96ef8835358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FormationTest
 --- !u!1 &739782379
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,11 +525,11 @@ Transform:
   m_GameObject: {fileID: 853993882}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.15455, y: -2.8449101, z: 1.1778}
+  m_LocalPosition: {x: 0, y: 0.6999998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1004585692}
+  m_Father: {fileID: 8617415142576110371}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1004585690
 GameObject:
@@ -504,8 +574,7 @@ Transform:
   m_LocalPosition: {x: 0.15455, y: -2.45509, z: -1.1778}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 853993883}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8617415142576110365
@@ -574,7 +643,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5760808719381086514, guid: 24cacd6000e0c584996051312da34489, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 853993883}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4191718803366795309, guid: 24cacd6000e0c584996051312da34489, type: 3}
       insertIndex: -1
@@ -683,6 +755,11 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!4 &8617415142576110371 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5760808719381086514, guid: 24cacd6000e0c584996051312da34489, type: 3}
+  m_PrefabInstance: {fileID: 8617415142576110365}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -692,3 +769,4 @@ SceneRoots:
   - {fileID: 8617415142576110365}
   - {fileID: 1004585692}
   - {fileID: 96160747}
+  - {fileID: 338907380}
