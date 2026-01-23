@@ -184,7 +184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &96160746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,8 +198,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 4002148140208487566, guid: 39eda9e37a7ef974ab57e047dba0a895, type: 3}
+  autoSpawn: 0
   spawnInterval: 1
-  spawnXRange: 4.2
+  screenSideMargin: 0.25
+  topExtra: 1.5
 --- !u!4 &96160747
 Transform:
   m_ObjectHideFlags: 0
@@ -812,6 +814,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1275601741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1275601743}
+  - component: {fileID: 1275601742}
+  m_Layer: 0
+  m_Name: WaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1275601742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275601741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78432dc07af80c408544375fca2040e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaveManager
+  spawner: {fileID: 0}
+  formation: {fileID: 0}
+  waves:
+  - name: Wave1
+    startDelay: 0
+    phases:
+    - name: single 1-1
+      style: 0
+      enemyPrefab: {fileID: 0}
+      count: 0
+      startDelay: 0
+      spawnInterval: 0
+      waitForClear: 0
+      cols: 0
+    - name: 
+      style: 0
+      enemyPrefab: {fileID: 0}
+      count: 0
+      startDelay: 0
+      spawnInterval: 0
+      waitForClear: 0
+      cols: 0
+  - name: 
+    startDelay: 0
+    phases: []
+  - name: 
+    startDelay: 0
+    phases: []
+  countGrowthPerWave: 0.15
+  intervalReductionPerWave: 0.08
+  minSpawnInterval: 0.06
+--- !u!4 &1275601743
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275601741}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1405544935
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,3 +1314,4 @@ SceneRoots:
   - {fileID: 338907380}
   - {fileID: 1999533178}
   - {fileID: 35274665}
+  - {fileID: 1275601743}

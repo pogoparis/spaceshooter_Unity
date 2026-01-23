@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -40,11 +41,15 @@ public class FormationController : MonoBehaviour
     [Header("Enemy")]
     public GameObject enemyPrefab;
 
+    public event Action<GameObject> OnEnemySpawned;
+
     Camera cam;
 
     // taille ennemi (en unités monde)
     float enemyW = 1f;
     float enemyH = 1f;
+
+    int spawnTotalOverride = 0;
 
     void Awake()
     {
@@ -53,6 +58,13 @@ public class FormationController : MonoBehaviour
 
     public void SpawnFormation()
     {
+        SpawnFormation(0);
+    }
+
+    public void SpawnFormation(int totalOverride)
+    {
+        spawnTotalOverride = Mathf.Max(0, totalOverride);
+
         if (enemyPrefab == null || cam == null) return;
 
         if (autoSpacing)
@@ -92,7 +104,6 @@ public class FormationController : MonoBehaviour
         float halfW = cam.orthographicSize * cam.aspect;
         float screenW = halfW * 2f;
 
-        // On veut que TOUT le sprite rentre :
         // totalWidth = (cols-1)*colSpacing + enemyW  <=  screenW - 2*screenSideMargin
         float availableW = screenW - (2f * screenSideMargin);
         float neededW = (cols - 1) * colSpacing + enemyW;
@@ -106,7 +117,8 @@ public class FormationController : MonoBehaviour
 
     IEnumerator SpawnFormationRoutine()
     {
-        int total = cols * rows;
+        int defaultTotal = cols * rows;
+        int total = (spawnTotalOverride > 0) ? spawnTotalOverride : defaultTotal;
 
         for (int i = 0; i < total; i++)
         {
@@ -127,6 +139,8 @@ public class FormationController : MonoBehaviour
             control.x = fromLeft ? (worldStart.x + arcSideOffset) : (worldStart.x - arcSideOffset);
 
             GameObject e = Instantiate(enemyPrefab);
+            OnEnemySpawned?.Invoke(e);
+
             var member = e.GetComponent<EnemyFormationMember>();
             if (member == null) member = e.AddComponent<EnemyFormationMember>();
 
