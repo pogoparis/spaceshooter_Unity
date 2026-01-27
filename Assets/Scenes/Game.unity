@@ -373,12 +373,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0629c65dd81adc746a09e124846430dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FormationController
+  enemyPrefab: {fileID: 4002148140208487566, guid: 39eda9e37a7ef974ab57e047dba0a895, type: 3}
+  enemyParent: {fileID: 0}
   cols: 5
   rows: 4
-  autoSpacing: 1
-  spacingPadding: 0.15
-  screenSideMargin: 0.25
-  screenTopMargin: 0.25
   rowSpacing: 1.2
   colSpacing: 0.9
   topMargin: 1.2
@@ -389,7 +387,10 @@ MonoBehaviour:
   arcDownAmount: 4
   spawnStagger: 0.3
   rowStaggerBonus: 0.25
-  enemyPrefab: {fileID: 4002148140208487566, guid: 39eda9e37a7ef974ab57e047dba0a895, type: 3}
+  gameplayCamera: {fileID: 0}
+  zPlane: 0
+  edgePadding: 0.15
+  clampDuringFlyIn: 1
 --- !u!4 &338907380
 Transform:
   m_ObjectHideFlags: 0
@@ -858,7 +859,7 @@ MonoBehaviour:
     phases:
     - route: {fileID: 11400000, guid: 0cc5c7a324c39024d980053d10ab26d8, type: 2}
       name: wave2-phase1
-      style: 0
+      style: 1
       enemyPrefab: {fileID: 4002148140208487566, guid: 39eda9e37a7ef974ab57e047dba0a895, type: 3}
       count: 10
       startDelay: 0

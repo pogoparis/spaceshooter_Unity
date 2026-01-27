@@ -1,7 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
-using System;
-
 
 public class FormationController : MonoBehaviour
 {
@@ -18,25 +17,28 @@ public class FormationController : MonoBehaviour
     public float colSpacing = 1.2f;
 
     [Header("Placement")]
-    public float topMargin = 1.2f;      // marge depuis le haut de l'écran (world units)
-    public float entryOutsideX = 1.2f;  // spawn hors écran (world units)
-    public float entryYExtra = 0.5f;    // spawn un peu au-dessus (world units)
+    public float topMargin = 1.2f;
+    public float entryOutsideX = 1.2f;
+    public float entryYExtra = 0.5f;
 
     [Header("Fly-in Path")]
     public float flyInDuration = 1.2f;
     public float arcSideOffset = 2.0f;
     public float arcDownAmount = 1.0f;
 
-    //  Ces 2 champs sont attendus par WaveManager (d’après tes erreurs)
     [Header("Stagger (WaveManager expects these)")]
-    public float spawnStagger = 0.05f;      // délai entre ennemis
-    public float rowStaggerBonus = 0.00f;   // bonus de délai par rangée
+    public float spawnStagger = 0.05f;
+    public float rowStaggerBonus = 0.00f;
 
-    [Header("Screen Safety (anti hors-écran)")]
+    [Header("Screen Safety")]
     public Camera gameplayCamera;
     public float zPlane = 0f;
     public float edgePadding = 0.15f;
     public bool clampDuringFlyIn = true;
+
+    [Header("Fly-in Safety")]
+    public bool disableEnemyScriptDuringFlyIn = true;
+    public bool pauseRouteDuringFlyIn = true;
 
     private Rect worldRect;
 
@@ -58,73 +60,92 @@ public class FormationController : MonoBehaviour
         worldRect = Rect.MinMaxRect(bl.x, bl.y, tr.x, tr.y);
     }
 
-    //  Overload “compat” : WaveManager appelle SpawnFormation(x)
-    public void SpawnFormation(object _)
-    {
-        SpawnFormation();
-    }
-
-    //  Ta méthode normale
     public void SpawnFormation()
     {
+        int count = Mathf.Max(0, rows * cols);
+        SpawnFormation(count);
+    }
+
+    public void SpawnFormation(object arg)
+    {
+        if (arg is int i) SpawnFormation(i);
+        else SpawnFormation();
+    }
+
+    public void SpawnFormation(int count)
+    {
         if (enemyPrefab == null) return;
+        if (count <= 0) return;
 
         RefreshWorldRect();
 
         float enemyHalfWidth = GetPrefabHalfWidth(enemyPrefab);
         float enemyHalfHeight = GetPrefabHalfHeight(enemyPrefab);
 
-        float formationWidth = (cols - 1) * colSpacing;
-        float formationHeight = (rows - 1) * rowSpacing;
+        int safeCols = Mathf.Max(1, cols);
+
+        float maxRowSize = Mathf.Min(safeCols, count);
+        float halfFormationWidth = (maxRowSize - 1f) * colSpacing * 0.5f;
 
         float centerX = worldRect.center.x;
-        float topY = worldRect.yMax - topMargin;
-
-        float halfFormation = formationWidth * 0.5f;
-        float minCenterX = worldRect.xMin + edgePadding + enemyHalfWidth + halfFormation;
-        float maxCenterX = worldRect.xMax - edgePadding - enemyHalfWidth - halfFormation;
+        float minCenterX = worldRect.xMin + edgePadding + enemyHalfWidth + halfFormationWidth;
+        float maxCenterX = worldRect.xMax - edgePadding - enemyHalfWidth - halfFormationWidth;
         centerX = Mathf.Clamp(centerX, minCenterX, maxCenterX);
 
-        float startX = centerX - halfFormation;
-        float startY = topY;
+        float topY = worldRect.yMax - topMargin;
 
-        for (int r = 0; r < rows; r++)
+        for (int i = 0; i < count; i++)
         {
-            for (int c = 0; c < cols; c++)
-            {
-                Vector3 targetPos = new Vector3(
-                    startX + c * colSpacing,
-                    startY - r * rowSpacing,
-                    zPlane
-                );
+            int r = i / safeCols;
+            int c = i % safeCols;
 
-                targetPos = ClampInsideScreen(targetPos, enemyHalfWidth, enemyHalfHeight);
+            int remaining = count - (r * safeCols);
+            int rowSize = Mathf.Min(safeCols, remaining);
+            float rowHalf = (rowSize - 1f) * 0.5f;
 
-                float spawnX = (targetPos.x < worldRect.center.x) ? (worldRect.xMin - entryOutsideX) : (worldRect.xMax + entryOutsideX);
-                Vector3 spawnPos = new Vector3(spawnX, worldRect.yMax + entryYExtra, zPlane);
+            Vector3 targetPos = new Vector3(
+                centerX + (c - rowHalf) * colSpacing,
+                topY - r * rowSpacing,
+                zPlane
+            );
 
-                GameObject e = Instantiate(enemyPrefab, spawnPos, Quaternion.identity, enemyParent);
-                EnemyRouteFollower rf = e.GetComponent<EnemyRouteFollower>();
-                OnEnemySpawned?.Invoke(e);
+            targetPos = ClampInsideScreen(targetPos, enemyHalfWidth, enemyHalfHeight);
 
-
-
-                //  Délai "stagger" attendu par WaveManager
-                int index = r * cols + c;
-                float delay = (index * spawnStagger) + (r * rowStaggerBonus);
-
-                StartCoroutine(DelayedFlyIn(e.transform, spawnPos, targetPos, delay, enemyHalfWidth, enemyHalfHeight, rf));
-            }
+            float delay = (i * spawnStagger) + (r * rowStaggerBonus);
+            StartCoroutine(SpawnOneDelayed(delay, targetPos, enemyHalfWidth, enemyHalfHeight));
         }
     }
 
-    private IEnumerator DelayedFlyIn(
-      Transform t, Vector3 start, Vector3 end, float delay,
-      float halfW, float halfH, EnemyRouteFollower rf)
+    private IEnumerator SpawnOneDelayed(float delay, Vector3 targetPos, float halfW, float halfH)
     {
         if (delay > 0f) yield return new WaitForSeconds(delay);
-        yield return FlyIn(t, start, end, halfW, halfH);
-        if (rf != null) rf.SetPaused(false); // route ON après le fly-in
+
+        float spawnX = (targetPos.x < worldRect.center.x) ? (worldRect.xMin - entryOutsideX) : (worldRect.xMax + entryOutsideX);
+        Vector3 spawnPos = new Vector3(spawnX, worldRect.yMax + entryYExtra, zPlane);
+
+        Transform parent = enemyParent;
+        GameObject e = (parent != null)
+            ? Instantiate(enemyPrefab, spawnPos, Quaternion.identity, parent)
+            : Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+
+        var routeFollower = e.GetComponent<EnemyRouteFollower>();
+        if (pauseRouteDuringFlyIn && routeFollower != null) routeFollower.SetPaused(true);
+
+        var enemy = e.GetComponent<Enemy>();
+        if (disableEnemyScriptDuringFlyIn && enemy != null) enemy.enabled = false;
+
+        OnEnemySpawned?.Invoke(e);
+
+        yield return FlyIn(e.transform, spawnPos, targetPos, halfW, halfH);
+
+        if (pauseRouteDuringFlyIn && routeFollower != null)
+        {
+            routeFollower.RebaseToCurrentPosition();
+            routeFollower.SetPaused(false);
+        }
+
+        if (disableEnemyScriptDuringFlyIn && enemy != null)
+            enemy.enabled = true;
     }
 
     private IEnumerator FlyIn(Transform t, Vector3 start, Vector3 end, float halfW, float halfH)
@@ -140,7 +161,7 @@ public class FormationController : MonoBehaviour
         while (time < flyInDuration)
         {
             time += Time.deltaTime;
-            float t01 = Mathf.Clamp01(time / flyInDuration);
+            float t01 = Mathf.Clamp01(time / Mathf.Max(0.0001f, flyInDuration));
 
             Vector3 pos = Bezier2(start, p1, p2, t01);
 

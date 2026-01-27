@@ -9,25 +9,38 @@ public class EnemyRouteFollower : MonoBehaviour
     private int index;
     private float pauseTimer;
     private bool finished;
+    private bool paused;
+    private Camera cam;
 
     public bool HasRoute => route != null && route.IsValid && !finished;
 
-    private bool paused;
     public void SetPaused(bool value) => paused = value;
+
+    public void RebaseToCurrentPosition()
+    {
+        basePos = transform.position;
+    }
+
+    private void Awake()
+    {
+        cam = Camera.main;
+    }
 
     public void ApplyRoute(EnemyRouteSO newRoute)
     {
         route = newRoute;
         finished = false;
         pauseTimer = 0f;
-        index = 0;
         basePos = transform.position;
 
         if (route != null && route.IsValid)
         {
-            // Snap au premier point (si offset = 0,0 -> pas de saut)
             transform.position = ResolvePoint(route.nodes[0]);
             index = 1;
+        }
+        else
+        {
+            index = 0;
         }
     }
 
@@ -41,15 +54,21 @@ public class EnemyRouteFollower : MonoBehaviour
 
     private void Update()
     {
+        if (paused) return;
         if (!HasRoute) return;
 
-        // Si formation fly-in / inFormation : on ne suit pas la route
         var fm = GetComponent<EnemyFormationMember>();
         if (fm != null && (fm.isFlyingIn || fm.inFormation)) return;
 
         if (pauseTimer > 0f)
         {
             pauseTimer -= Time.deltaTime;
+            return;
+        }
+
+        if (index < 0 || index >= route.nodes.Count)
+        {
+            finished = true;
             return;
         }
 
@@ -82,7 +101,6 @@ public class EnemyRouteFollower : MonoBehaviour
                             break;
 
                         default:
-                            // reprend la descente normale (Enemy.Update)
                             ClearRoute();
                             break;
                     }
@@ -93,7 +111,7 @@ public class EnemyRouteFollower : MonoBehaviour
 
     private Vector3 ResolvePoint(EnemyRouteSO.RouteNode node)
     {
-        Camera cam = Camera.main;
+        if (cam == null) cam = Camera.main;
         return route.ResolvePoint(node, basePos, transform.position.z, cam);
     }
 }
