@@ -93,7 +93,7 @@ public class EnemyRouteFollower : MonoBehaviour
 
     private Vector3 ResolvePoint(EnemyRouteSO.RouteNode node)
     {
-        // basePos est déjà ton spawn world pos (tu le set dans ApplyRoute)
-        return route.ResolvePoint(node, basePos, transform.position.z, Camera.main);
+        Camera cam = Camera.main;
+        return route.ResolvePoint(node, basePos, transform.position.z, cam);
     }
 }

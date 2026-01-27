@@ -104,7 +104,9 @@ public class FormationController : MonoBehaviour
                 Vector3 spawnPos = new Vector3(spawnX, worldRect.yMax + entryYExtra, zPlane);
 
                 GameObject e = Instantiate(enemyPrefab, spawnPos, Quaternion.identity, enemyParent);
+                EnemyRouteFollower rf = e.GetComponent<EnemyRouteFollower>();
                 OnEnemySpawned?.Invoke(e);
+
 
 
                 //  Délai "stagger" attendu par WaveManager
