@@ -3,71 +3,54 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public event Action<GameObject> OnEnemySpawned;
+
     [Header("Prefab")]
     public GameObject enemyPrefab;
 
-    [Header("Legacy auto spawn (désactivé quand WaveManager pilote)")]
+    [Header("Auto Spawn (désactive si WaveManager)")]
     public bool autoSpawn = false;
     public float spawnInterval = 1.0f;
 
     [Header("Spawn Area")]
-    public float screenSideMargin = 0.25f; // marge monde gauche/droite
-    public float topExtra = 1.5f;          // spawn au-dessus du haut
-
-    public event Action<GameObject> OnEnemySpawned;
+    public float spawnXRange = 4.2f;
+    public float spawnOutsideTop = 1.5f;
 
     float nextSpawn;
     Camera cam;
-    float topY;
-    float enemyHalfW = 0.5f;
 
-    void Start()
+    void Awake()
     {
         cam = Camera.main;
-        RecomputeEnemySize();
-        RecomputeTopY();
+        nextSpawn = Time.time + spawnInterval;
     }
 
     void Update()
     {
         if (!autoSpawn) return;
-        if (Time.time < nextSpawn) return;
-        if (enemyPrefab == null) return;
 
-        SpawnOneRandomTop();
-        nextSpawn = Time.time + spawnInterval;
+        if (Time.time >= nextSpawn)
+        {
+            SpawnOneRandomTop();
+            nextSpawn = Time.time + Mathf.Max(0.01f, spawnInterval);
+        }
     }
 
-    public GameObject SpawnOneRandomTop()
+    public void SpawnOneRandomTop()
     {
-        if (enemyPrefab == null) return null;
-        if (cam == null) cam = Camera.main;
+        if (enemyPrefab == null) return;
 
-        RecomputeEnemySize();
-        RecomputeTopY();
-
-        float halfW = cam.orthographicSize * cam.aspect;
-        float xRange = Mathf.Max(0.1f, halfW - screenSideMargin - enemyHalfW);
-
-        Vector3 pos = new Vector3(
-            UnityEngine.Random.Range(-xRange, xRange),
-            topY,
-            0f
-        );
+        float topY = GetTopY();
+        Vector3 pos = new Vector3(UnityEngine.Random.Range(-spawnXRange, spawnXRange), topY, 0f);
 
         var go = Instantiate(enemyPrefab, pos, Quaternion.identity);
         OnEnemySpawned?.Invoke(go);
-        return go;
     }
 
-    void RecomputeTopY()
+    float GetTopY()
     {
-        topY = (cam != null) ? (cam.transform.position.y + cam.orthographicSize + topExtra) : 10f;
-    }
-
-    void RecomputeEnemySize()
-    {
-        var sr = enemyPrefab != null ? enemyPrefab.GetComponentInChildren<SpriteRenderer>() : null;
-        if (sr != null) enemyHalfW = sr.bounds.size.x * 0.5f;
+        if (cam == null) cam = Camera.main;
+        if (cam == null) return 10f;
+        return cam.transform.position.y + cam.orthographicSize + spawnOutsideTop;
     }
 }

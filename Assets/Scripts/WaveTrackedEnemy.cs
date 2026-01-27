@@ -1,21 +1,32 @@
 using UnityEngine;
 
-public sealed class WaveTrackedEnemy : MonoBehaviour
+public class WaveTrackedEnemy : MonoBehaviour
 {
-    private WaveManager owner;
-    private bool reported;
+    WaveManager manager;
+    bool notified;
 
-    public void Init(WaveManager waveManager) => owner = waveManager;
-
-    private void OnEnable() => reported = false;
-
-    private void OnDisable() => ReportGone();
-    private void OnDestroy() => ReportGone();
-
-    private void ReportGone()
+    public void Init(WaveManager m)
     {
-        if (reported) return;
-        reported = true;
-        owner?.NotifyEnemyGone(this);
+        manager = m;
+        notified = false;
+    }
+
+    void OnDisable()
+    {
+        NotifyGone();
+    }
+
+    void OnDestroy()
+    {
+        NotifyGone();
+    }
+
+    void NotifyGone()
+    {
+        if (notified) return;
+        notified = true;
+
+        if (manager != null)
+            manager.NotifyEnemyGone(this);
     }
 }

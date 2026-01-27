@@ -138,7 +138,7 @@ public class FormationController : MonoBehaviour
             control.y -= arcDownAmount;
             control.x = fromLeft ? (worldStart.x + arcSideOffset) : (worldStart.x - arcSideOffset);
 
-            GameObject e = Instantiate(enemyPrefab);
+            GameObject e = Instantiate(enemyPrefab, worldStart, Quaternion.identity);
             OnEnemySpawned?.Invoke(e);
 
             var member = e.GetComponent<EnemyFormationMember>();

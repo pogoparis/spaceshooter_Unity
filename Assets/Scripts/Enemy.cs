@@ -2,25 +2,38 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public enum MovePattern { StraightDown, Sine, ZigZag }
+
     [Header("Stats")]
     public int maxHp = 3;
     public float speed = 2.5f;
 
+    [Header("Movement (default = StraightDown)")]
+    public MovePattern movePattern = MovePattern.StraightDown;
+    public float xAmplitude = 1.5f;      // utilisé pour Sine/ZigZag
+    public float sineFrequency = 2.0f;   // utilisé pour Sine
+    public float zigzagSpeed = 2.0f;     // utilisé pour ZigZag
+
+    [Header("FX")]
+    public GameObject explosionPrefab;
+
     [Header("HP Bar")]
-    public Transform hpFill;              // assigne HPFill ici (drag & drop)
-    public bool hideBarWhenFull = true;   // optionnel
+    public Transform hpFill;
+    public bool hideBarWhenFull = true;
 
     int hp;
     float bottomY;
 
-    // HP bar anchoring
     Vector3 fillBasePos;
     Vector3 fillBaseScale;
 
-    // Hit flash (optionnel)
     SpriteRenderer sr;
     Color baseColor;
     float flashTimer;
+
+    // Movement state
+    float spawnX;
+    float t0;
 
     void OnEnable()
     {
@@ -39,24 +52,75 @@ public class Enemy : MonoBehaviour
             fillBaseScale = hpFill.localScale;
             UpdateHpBar();
         }
+
+        CaptureMoveOrigin();
+    }
+
+    void CaptureMoveOrigin()
+    {
+        spawnX = transform.position.x;
+        t0 = Time.time;
+    }
+
+    public void ResetMovement()
+    {
+        movePattern = MovePattern.StraightDown;
+        CaptureMoveOrigin();
+    }
+
+    public void SetMovement(MovePattern pattern, float amp, float freq, float zig)
+    {
+        movePattern = pattern;
+        xAmplitude = amp;
+        sineFrequency = freq;
+        zigzagSpeed = zig;
+        CaptureMoveOrigin();
     }
 
     void Update()
     {
-        // Petit flash à l'impact
+        // Flash hit
         if (sr != null && flashTimer > 0f)
         {
             flashTimer -= Time.deltaTime;
             sr.color = (flashTimer > 0f) ? Color.white : baseColor;
         }
 
+
+        var route = GetComponent<EnemyRouteFollower>();
+        if (route != null && route.HasRoute)
+            return; // la route pilote le mouvement
+
+
         // Formation: ne pas bouger pendant l'entrée / ni en formation
         var member = GetComponent<EnemyFormationMember>();
         if (member != null && (member.isFlyingIn || member.inFormation))
             return;
 
-        // Mouvement normal (si pas formation)
-        transform.position += Vector3.down * speed * Time.deltaTime;
+        Vector3 p = transform.position;
+
+        // Toujours descendre
+        p += Vector3.down * speed * Time.deltaTime;
+
+        // Mouvement horizontal optionnel
+        float t = Time.time - t0;
+
+        switch (movePattern)
+        {
+            case MovePattern.Sine:
+                p.x = spawnX + Mathf.Sin(t * sineFrequency * Mathf.PI * 2f) * xAmplitude;
+                break;
+
+            case MovePattern.ZigZag:
+                p.x = spawnX + (Mathf.PingPong(t * zigzagSpeed, xAmplitude * 2f) - xAmplitude);
+                break;
+
+            default:
+                // StraightDown -> rien
+                break;
+        }
+
+        transform.position = p;
 
         if (transform.position.y < bottomY)
             gameObject.SetActive(false);
@@ -70,7 +134,15 @@ public class Enemy : MonoBehaviour
         UpdateHpBar();
 
         if (hp <= 0)
-            gameObject.SetActive(false);
+            Die();
+    }
+
+    void Die()
+    {
+        if (explosionPrefab != null)
+            Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+
+        gameObject.SetActive(false);
     }
 
     void UpdateHpBar()
@@ -79,17 +151,13 @@ public class Enemy : MonoBehaviour
 
         float ratio = Mathf.Clamp01((float)hp / Mathf.Max(1, maxHp));
 
-        // Scale X du fill
         Vector3 s = fillBaseScale;
         s.x = fillBaseScale.x * ratio;
         hpFill.localScale = s;
 
-        // Pour que ça "vide" vers la droite (garde le bord gauche fixe)
-        // Avec un sprite centré, on décale le fill vers la gauche quand il rétrécit.
         float dx = (fillBaseScale.x - s.x) * 0.5f;
         hpFill.localPosition = new Vector3(fillBasePos.x - dx, fillBasePos.y, fillBasePos.z);
 
-        // Option : cacher quand full
         if (hideBarWhenFull)
             hpFill.parent.gameObject.SetActive(hp < maxHp);
         else

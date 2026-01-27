@@ -184,7 +184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &96160746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,8 +200,8 @@ MonoBehaviour:
   enemyPrefab: {fileID: 4002148140208487566, guid: 39eda9e37a7ef974ab57e047dba0a895, type: 3}
   autoSpawn: 0
   spawnInterval: 1
-  spawnXRange: 4.2
-  spawnOutsideTop: 1.5
+  screenSideMargin: 0.25
+  topExtra: 1.5
 --- !u!4 &96160747
 Transform:
   m_ObjectHideFlags: 0
@@ -354,6 +354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 338907380}
   - component: {fileID: 338907379}
+  - component: {fileID: 338907381}
   m_Layer: 0
   m_Name: FormationController
   m_TagString: Untagged
@@ -405,6 +406,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &338907381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338907378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aef759534c35c934a88dc96ef8835358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FormationTest
 --- !u!1 &539967963
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,55 +843,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78432dc07af80c408544375fca2040e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
-  spawner: {fileID: 96160746}
-  formation: {fileID: 338907379}
+  spawner: {fileID: 0}
+  formation: {fileID: 0}
   waves:
-  - name: Wave 1
-    startDelay: 3
+  - name: Wave1
+    startDelay: 0
     phases:
-    - route: {fileID: 11400000, guid: d93b9b6fcc6bb2d46ad40ddd0d0c1796, type: 2}
-      name: Route zigZag
-      style: 1
-      enemyPrefab: {fileID: 4002148140208487566, guid: 05d48fcd4d992ff46ba3d132fa3ea0a6, type: 3}
-      count: 12
-      startDelay: 0
-      spawnInterval: 0.2
-      waitForClear: 1
-      cols: 4
-      overrideFormationSettings: 0
-      flyInDuration: 1.2
-      arcSideOffset: 2
-      arcDownAmount: 4
-      spawnStagger: 0.12
-      rowStaggerBonus: 0.25
-      spawnTimeout: 10
-      clearTimeout: 50
-  - name: Wave 2
-    startDelay: 5
-    phases:
-    - route: {fileID: 11400000, guid: 0cc5c7a324c39024d980053d10ab26d8, type: 2}
-      name: wave2-phase1
+    - name: single 1-1
       style: 0
-      enemyPrefab: {fileID: 4002148140208487566, guid: 39eda9e37a7ef974ab57e047dba0a895, type: 3}
-      count: 10
+      enemyPrefab: {fileID: 0}
+      count: 0
       startDelay: 0
-      spawnInterval: 0.35
-      waitForClear: 1
+      spawnInterval: 0
+      waitForClear: 0
       cols: 0
-      overrideFormationSettings: 0
-      flyInDuration: 1.2
-      arcSideOffset: 2
-      arcDownAmount: 4
-      spawnStagger: 0.12
-      rowStaggerBonus: 0.25
-      spawnTimeout: 10
-      clearTimeout: 50
-  loopForever: 0
-  betweenWavesDelay: 1
+    - name: 
+      style: 0
+      enemyPrefab: {fileID: 0}
+      count: 0
+      startDelay: 0
+      spawnInterval: 0
+      waitForClear: 0
+      cols: 0
+  - name: 
+    startDelay: 0
+    phases: []
+  - name: 
+    startDelay: 0
+    phases: []
   countGrowthPerWave: 0.15
   intervalReductionPerWave: 0.08
   minSpawnInterval: 0.06
-  debugLogs: 1
 --- !u!4 &1275601743
 Transform:
   m_ObjectHideFlags: 0
