@@ -1,181 +1,192 @@
-using System;
-using System.Collections;
+Ôªøusing System.Collections;
 using UnityEngine;
+using System;
+
 
 public class FormationController : MonoBehaviour
 {
+    public event Action<GameObject> OnEnemySpawned;
+
+    [Header("Enemy Prefab")]
+    public GameObject enemyPrefab;
+    public Transform enemyParent;
+
     [Header("Grid")]
     public int cols = 5;
     public int rows = 4;
-
-    [Tooltip("Si true, calcule colSpacing/rowSpacing d'aprËs la taille du sprite ennemi + padding")]
-    public bool autoSpacing = true;
-
-    [Tooltip("Marge ajoutÈe autour d'un ennemi (en unitÈs du monde)")]
-    public float spacingPadding = 0.25f;
-
-    [Tooltip("Marge Ècran gauche/droite (en unitÈs monde)")]
-    public float screenSideMargin = 0.25f;
-
-    [Tooltip("Marge Ècran haut (en unitÈs monde)")]
-    public float screenTopMargin = 0.25f;
-
-    [Tooltip("Si autoSpacing=false, ces valeurs sont utilisÈes")]
-    public float rowSpacing = 1.2f;
-    public float colSpacing = 1.6f;
+    public float rowSpacing = 0.9f;
+    public float colSpacing = 1.2f;
 
     [Header("Placement")]
-    public float topMargin = 0.0f;      // marge supplÈmentaire (en plus du calcul auto)
-    public float entryOutsideX = 1.2f;  // spawn hors Ècran
-    public float entryYExtra = 0.5f;    // spawn un peu au-dessus
+    public float topMargin = 1.2f;      // marge depuis le haut de l'√©cran (world units)
+    public float entryOutsideX = 1.2f;  // spawn hors √©cran (world units)
+    public float entryYExtra = 0.5f;    // spawn un peu au-dessus (world units)
 
     [Header("Fly-in Path")]
-    public float flyInDuration = 1.2f;  // plus grand = plus lent
+    public float flyInDuration = 1.2f;
     public float arcSideOffset = 2.0f;
-    public float arcDownAmount = 4.0f;
+    public float arcDownAmount = 1.0f;
 
-    [Header("Timing")]
-    public float spawnStagger = 0.12f;     // dÈlai entre deux ennemis (queue leu-leu)
-    public float rowStaggerBonus = 0.25f;  // petite pause entre les rangÈes
+    //  Ces 2 champs sont attendus par WaveManager (d‚Äôapr√®s tes erreurs)
+    [Header("Stagger (WaveManager expects these)")]
+    public float spawnStagger = 0.05f;      // d√©lai entre ennemis
+    public float rowStaggerBonus = 0.00f;   // bonus de d√©lai par rang√©e
 
-    [Header("Enemy")]
-    public GameObject enemyPrefab;
+    [Header("Screen Safety (anti hors-√©cran)")]
+    public Camera gameplayCamera;
+    public float zPlane = 0f;
+    public float edgePadding = 0.15f;
+    public bool clampDuringFlyIn = true;
 
-    public event Action<GameObject> OnEnemySpawned;
+    private Rect worldRect;
 
-    Camera cam;
-
-    // taille ennemi (en unitÈs monde)
-    float enemyW = 1f;
-    float enemyH = 1f;
-
-    int spawnTotalOverride = 0;
-
-    void Awake()
+    private void Awake()
     {
-        cam = Camera.main;
+        if (gameplayCamera == null) gameplayCamera = Camera.main;
+        RefreshWorldRect();
     }
 
+    private void OnEnable() => RefreshWorldRect();
+
+    private void RefreshWorldRect()
+    {
+        if (gameplayCamera == null) return;
+
+        float zDist = Mathf.Abs(zPlane - gameplayCamera.transform.position.z);
+        Vector3 bl = gameplayCamera.ViewportToWorldPoint(new Vector3(0f, 0f, zDist));
+        Vector3 tr = gameplayCamera.ViewportToWorldPoint(new Vector3(1f, 1f, zDist));
+        worldRect = Rect.MinMaxRect(bl.x, bl.y, tr.x, tr.y);
+    }
+
+    //  Overload ‚Äúcompat‚Äù : WaveManager appelle SpawnFormation(x)
+    public void SpawnFormation(object _)
+    {
+        SpawnFormation();
+    }
+
+    //  Ta m√©thode normale
     public void SpawnFormation()
     {
-        SpawnFormation(0);
-    }
+        if (enemyPrefab == null) return;
 
-    public void SpawnFormation(int totalOverride)
-    {
-        spawnTotalOverride = Mathf.Max(0, totalOverride);
+        RefreshWorldRect();
 
-        if (enemyPrefab == null || cam == null) return;
+        float enemyHalfWidth = GetPrefabHalfWidth(enemyPrefab);
+        float enemyHalfHeight = GetPrefabHalfHeight(enemyPrefab);
 
-        if (autoSpacing)
-            ComputeAutoSpacing();
+        float formationWidth = (cols - 1) * colSpacing;
+        float formationHeight = (rows - 1) * rowSpacing;
 
-        // Anchor formation : centrÈ camÈra + suffisamment bas pour ne pas couper la 1Ëre rangÈe
-        float topY = GetTopY();
-        float anchorY = topY - (screenTopMargin + (enemyH * 0.5f) + topMargin);
-        transform.position = new Vector3(cam.transform.position.x, anchorY, 0f);
+        float centerX = worldRect.center.x;
+        float topY = worldRect.yMax - topMargin;
 
-        StopAllCoroutines();
-        StartCoroutine(SpawnFormationRoutine());
-    }
+        float halfFormation = formationWidth * 0.5f;
+        float minCenterX = worldRect.xMin + edgePadding + enemyHalfWidth + halfFormation;
+        float maxCenterX = worldRect.xMax - edgePadding - enemyHalfWidth - halfFormation;
+        centerX = Mathf.Clamp(centerX, minCenterX, maxCenterX);
 
-    void ComputeAutoSpacing()
-    {
-        var sr = enemyPrefab.GetComponentInChildren<SpriteRenderer>();
-        if (sr != null)
+        float startX = centerX - halfFormation;
+        float startY = topY;
+
+        for (int r = 0; r < rows; r++)
         {
-            enemyW = sr.bounds.size.x;
-            enemyH = sr.bounds.size.y;
-        }
-        else
-        {
-            enemyW = 1f;
-            enemyH = 1f;
-        }
+            for (int c = 0; c < cols; c++)
+            {
+                Vector3 targetPos = new Vector3(
+                    startX + c * colSpacing,
+                    startY - r * rowSpacing,
+                    zPlane
+                );
 
-        // Base spacing = taille + padding
-        colSpacing = enemyW + spacingPadding;
-        rowSpacing = enemyH + spacingPadding;
+                targetPos = ClampInsideScreen(targetPos, enemyHalfWidth, enemyHalfHeight);
 
-        colSpacing = Mathf.Clamp(colSpacing, 0.8f, 3.0f);
-        rowSpacing = Mathf.Clamp(rowSpacing, 0.6f, 3.0f);
+                float spawnX = (targetPos.x < worldRect.center.x) ? (worldRect.xMin - entryOutsideX) : (worldRect.xMax + entryOutsideX);
+                Vector3 spawnPos = new Vector3(spawnX, worldRect.yMax + entryYExtra, zPlane);
 
-        // Largeur dispo Ècran
-        float halfW = cam.orthographicSize * cam.aspect;
-        float screenW = halfW * 2f;
+                GameObject e = Instantiate(enemyPrefab, spawnPos, Quaternion.identity, enemyParent);
+                OnEnemySpawned?.Invoke(e);
 
-        // totalWidth = (cols-1)*colSpacing + enemyW  <=  screenW - 2*screenSideMargin
-        float availableW = screenW - (2f * screenSideMargin);
-        float neededW = (cols - 1) * colSpacing + enemyW;
 
-        if (neededW > availableW && cols > 1)
-        {
-            float maxColSpacing = (availableW - enemyW) / (cols - 1);
-            colSpacing = Mathf.Max(0.6f, maxColSpacing);
+                //  D√©lai "stagger" attendu par WaveManager
+                int index = r * cols + c;
+                float delay = (index * spawnStagger) + (r * rowStaggerBonus);
+
+                StartCoroutine(DelayedFlyIn(e.transform, spawnPos, targetPos, delay, enemyHalfWidth, enemyHalfHeight));
+            }
         }
     }
 
-    IEnumerator SpawnFormationRoutine()
+    private IEnumerator DelayedFlyIn(Transform t, Vector3 start, Vector3 end, float delay, float halfW, float halfH)
     {
-        int defaultTotal = cols * rows;
-        int total = (spawnTotalOverride > 0) ? spawnTotalOverride : defaultTotal;
+        if (delay > 0f) yield return new WaitForSeconds(delay);
+        yield return FlyIn(t, start, end, halfW, halfH);
+    }
 
-        for (int i = 0; i < total; i++)
+    private IEnumerator FlyIn(Transform t, Vector3 start, Vector3 end, float halfW, float halfH)
+    {
+        float time = 0f;
+
+        float dirToCenter = Mathf.Sign(worldRect.center.x - end.x);
+        if (dirToCenter == 0f) dirToCenter = 1f;
+
+        Vector3 p1 = start + new Vector3(dirToCenter * arcSideOffset, -arcDownAmount, 0f);
+        Vector3 p2 = end;
+
+        while (time < flyInDuration)
         {
-            int c = i % cols;
-            int r = i / cols;
+            time += Time.deltaTime;
+            float t01 = Mathf.Clamp01(time / flyInDuration);
 
-            Vector3 localSlot = GetLocalSlot(c, r);
-            Vector3 worldTarget = transform.TransformPoint(localSlot);
+            Vector3 pos = Bezier2(start, p1, p2, t01);
 
-            bool fromLeft = (i % 2 == 0);
-            Vector3 worldStart = GetEntryPoint(fromLeft);
+            if (clampDuringFlyIn)
+                pos = ClampInsideScreen(pos, halfW, halfH, allowTopOutside: true);
 
-            // file indienne
-            worldStart.y += -(i * 0.15f);
-
-            Vector3 control = worldStart;
-            control.y -= arcDownAmount;
-            control.x = fromLeft ? (worldStart.x + arcSideOffset) : (worldStart.x - arcSideOffset);
-
-            GameObject e = Instantiate(enemyPrefab, worldStart, Quaternion.identity);
-            OnEnemySpawned?.Invoke(e);
-
-            var member = e.GetComponent<EnemyFormationMember>();
-            if (member == null) member = e.AddComponent<EnemyFormationMember>();
-
-            member.FlyIn(worldStart, control, worldTarget, flyInDuration, transform, localSlot);
-
-            float extraRowPause = (c == cols - 1) ? rowStaggerBonus : 0f;
-            yield return new WaitForSeconds(spawnStagger + extraRowPause);
+            t.position = pos;
+            yield return null;
         }
+
+        t.position = ClampInsideScreen(end, halfW, halfH);
     }
 
-    Vector3 GetLocalSlot(int col, int row)
+    private Vector3 ClampInsideScreen(Vector3 p, float halfW, float halfH, bool allowTopOutside = false)
     {
-        // grille centrÈe sur líancre
-        float widthCenters = (cols - 1) * colSpacing;
-        float startX = -widthCenters * 0.5f;
+        float minX = worldRect.xMin + edgePadding + halfW;
+        float maxX = worldRect.xMax - edgePadding - halfW;
 
-        float x = startX + col * colSpacing;
-        float y = -row * rowSpacing;
+        float minY = worldRect.yMin + edgePadding + halfH;
+        float maxY = worldRect.yMax - edgePadding - halfH;
 
-        return new Vector3(x, y, 0f);
+        p.x = Mathf.Clamp(p.x, minX, maxX);
+
+        if (!allowTopOutside) p.y = Mathf.Clamp(p.y, minY, maxY);
+        else p.y = Mathf.Max(p.y, minY);
+
+        p.z = zPlane;
+        return p;
     }
 
-    Vector3 GetEntryPoint(bool fromLeft)
+    private static Vector3 Bezier2(Vector3 a, Vector3 b, Vector3 c, float t)
     {
-        float topY = GetTopY();
-        float halfW = cam.orthographicSize * cam.aspect;
-
-        float x = fromLeft ? (-halfW - entryOutsideX) : (halfW + entryOutsideX);
-        float y = topY + entryYExtra;
-
-        return new Vector3(x, y, 0f);
+        float u = 1f - t;
+        return (u * u) * a + (2f * u * t) * b + (t * t) * c;
     }
 
-    float GetTopY()
+    private static float GetPrefabHalfWidth(GameObject prefab)
     {
-        return cam.transform.position.y + cam.orthographicSize;
+        var sr = prefab.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null && sr.sprite != null)
+            return sr.sprite.bounds.extents.x * Mathf.Abs(sr.transform.lossyScale.x);
+
+        return 0.2f;
+    }
+
+    private static float GetPrefabHalfHeight(GameObject prefab)
+    {
+        var sr = prefab.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null && sr.sprite != null)
+            return sr.sprite.bounds.extents.y * Mathf.Abs(sr.transform.lossyScale.y);
+
+        return 0.2f;
     }
 }
