@@ -57,6 +57,23 @@ public class PlayerController : MonoBehaviour
         maxBounds = new Vector2(camX + halfW - padX, camY + halfH - padY);
     }
 
+    bool WantsToShoot(Vector3 moveDelta)
+    {
+        // PC
+        if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
+            return true;
+
+        // Mobile
+        if (Input.touchCount > 0)
+            return true;
+
+        // Tir quand le joueur BOUGE (mobile-friendly)
+        if (moveDelta.sqrMagnitude > 0.0001f)
+            return true;
+
+        return false;
+    }
+
     void Update()
     {
         // Move
@@ -77,21 +94,25 @@ public class PlayerController : MonoBehaviour
             velY = (transform.position.y - lastPos.y) / Time.deltaTime;
         lastPos = transform.position;
 
-        // Auto-fire cadence fixe
+        //Tir espace
         if (Time.time >= nextFireTime && firePoint != null && bulletPool != null)
         {
-            var go = bulletPool.Get();
-            go.transform.position = firePoint.position;
-            go.transform.rotation = Quaternion.identity;
-
-            var b = go.GetComponent<Bullet>();
-            if (b != null)
+            if (WantsToShoot(delta))
             {
-                float downBoost = (velY < 0f) ? (-velY * inheritDownFactor) : 0f;
-                b.SetSpeedBoost(downBoost);
-            }
+                var go = bulletPool.Get();
+                go.transform.position = firePoint.position;
+                go.transform.rotation = Quaternion.identity;
 
-            nextFireTime = Time.time + fireRate;
+                var b = go.GetComponent<Bullet>();
+                if (b != null)
+                {
+                    float downBoost = (velY < 0f) ? (-velY * inheritDownFactor) : 0f;
+                    b.SetSpeedBoost(downBoost);
+                }
+
+                nextFireTime = Time.time + fireRate;
+            }
         }
+
     }
 }

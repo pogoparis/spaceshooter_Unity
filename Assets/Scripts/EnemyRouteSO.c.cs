@@ -6,13 +6,15 @@ using UnityEngine;
 public class EnemyRouteSO : ScriptableObject
 {
     [Header("Space")]
-    public bool offsetsRelativeToSpawn = true;
-
+    [Tooltip("If true, each node.offset is interpreted as Viewport coordinates (0..1). You can use values like -0.2 or 1.2 to spawn slightly off-screen.")]
     public bool useViewportPoints = false;
-    public Camera viewportCameraOverride;
+
+    [Tooltip("If useViewportPoints is false: if true, node.offset is relative to spawn position. If false, node.offset is a world position.")]
+    public bool offsetsRelativeToSpawn = true;
 
     [Header("Flow")]
     public bool loop = false;
+
     public EndMode endMode = EndMode.ContinueDefaultMovement;
 
     public enum EndMode
@@ -25,32 +27,17 @@ public class EnemyRouteSO : ScriptableObject
     [Serializable]
     public struct RouteNode
     {
+        [Tooltip("If useViewportPoints: Viewport (0..1). Otherwise: offset or world position (see offsetsRelativeToSpawn).")]
         public Vector2 offset;
+
         [Min(0.01f)] public float speed;
         [Min(0f)] public float pause;
+
+        [Tooltip("Optional. Used by EnemyRouteFollower to raise callbacks when the node is reached.")]
+        public string actionId;
     }
 
-    [Header("Nodes")]
     public List<RouteNode> nodes = new();
 
     public bool IsValid => nodes != null && nodes.Count >= 2;
-
-    public Vector3 ResolvePoint(RouteNode node, Vector3 baseWorldPos, float targetZ, Camera cam)
-    {
-        if (useViewportPoints)
-        {
-            if (cam == null) cam = (viewportCameraOverride != null) ? viewportCameraOverride : Camera.main;
-            if (cam == null) return new Vector3(node.offset.x, node.offset.y, targetZ);
-
-            float zDist = Mathf.Abs(targetZ - cam.transform.position.z);
-            Vector3 w = cam.ViewportToWorldPoint(new Vector3(node.offset.x, node.offset.y, zDist));
-            w.z = targetZ;
-            return w;
-        }
-
-        if (offsetsRelativeToSpawn)
-            return baseWorldPos + new Vector3(node.offset.x, node.offset.y, 0f);
-
-        return new Vector3(node.offset.x, node.offset.y, targetZ);
-    }
 }

@@ -225,10 +225,9 @@ public sealed class WaveManager : MonoBehaviour
 
         //  Route appliquée ici : marche pour SingleRandomTop ET FormationGrid
         var follower = go.GetComponent<EnemyRouteFollower>();
-        if (follower != null)
+        if (follower != null && currentPhaseRoute != null)
         {
-            if (currentPhaseRoute != null) follower.ApplyRoute(currentPhaseRoute);
-            else follower.ClearRoute();
+            follower.ApplyRoute(currentPhaseRoute);
         }
 
         aliveInPhase++;

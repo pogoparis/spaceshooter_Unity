@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ffd56d0422d9954c94191f16d09cf69, type: 3}
+  m_Name: Route_Boss_Phase1
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyRouteSO
+  useViewportPoints: 1
+  offsetsRelativeToSpawn: 1
+  loop: 0
+  endMode: 0
+  nodes:
+  - offset: {x: 0.15, y: 0.9}
+    speed: 2
+    pause: 1
+    actionId: sound_wave_left
+  - offset: {x: 0.5, y: 0.9}
+    speed: 2
+    pause: 0.5
+    actionId: sound_wave_center
+  - offset: {x: 0.85, y: 0.9}
+    speed: 2
+    pause: 1
+    actionId: sound_wave_right
+  - offset: {x: 0.5, y: 0.9}
+    speed: 2
+    pause: 0.5
+    actionId: sound_wave_center
+  - offset: {x: 0.15, y: 0.9}
+    speed: 2
+    pause: 0
+    actionId: 

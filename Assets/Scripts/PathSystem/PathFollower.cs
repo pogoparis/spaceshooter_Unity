@@ -37,44 +37,57 @@ public class PathFollower : MonoBehaviour
 
         aliveTime += Time.deltaTime;
 
-        // Break logic (simple + efficace pour démarrer)
-        if (!hasBroken && formationData != null)
-        {
-            if (formationData.behavior == FormationData.FormationBehavior.BreakAfterTime &&
-                aliveTime >= formationData.breakAfterSeconds)
-            {
-                DoBreak();
-            }
-            else if (formationData.behavior == FormationData.FormationBehavior.BreakOnWaypoint)
-            {
-                float breakT = EstimateWaypointT(formationData.breakAtWaypointIndex, currentPath);
-                if (pathProgress01 >= breakT) DoBreak();
-            }
-        }
+        HandleBreakLogic();
+        AdvanceProgress();
+        ApplyMovement();
+    }
 
+    private void HandleBreakLogic()
+    {
+        if (hasBroken || formationData == null) return;
+
+        switch (formationData.behavior)
+        {
+            case FormationData.FormationBehavior.BreakAfterTime:
+                if (aliveTime >= formationData.breakAfterSeconds)
+                    DoBreak();
+                break;
+
+            case FormationData.FormationBehavior.BreakOnWaypoint:
+                float breakT = EstimateWaypointT(formationData.breakAtWaypointIndex, currentPath);
+                if (pathProgress01 >= breakT)
+                    DoBreak();
+                break;
+        }
+    }
+
+    private void AdvanceProgress()
+    {
         float dur = Mathf.Max(0.01f, currentPath.totalDuration);
         pathProgress01 += (Time.deltaTime / dur) * currentSpeedMultiplier;
 
-        if (pathProgress01 >= 1f)
-        {
-            if (currentPath.isLooping) pathProgress01 %= 1f;
-            else
-            {
-                Destroy(gameObject); // ou pooling plus tard
-                return;
-            }
-        }
+        if (pathProgress01 < 1f) return;
 
+        if (currentPath.isLooping)
+            pathProgress01 %= 1f;
+        else
+            Destroy(gameObject); // pooling plus tard
+    }
+
+    private void ApplyMovement()
+    {
         Vector3 pos = currentPath.Evaluate(pathProgress01, cam, transform.position.z);
 
-        // Offset formation (si pas cassé)
-        if (!hasBroken && formationData != null && formationData.behavior != FormationData.FormationBehavior.IndividualPathsAfterBreak)
+        if (!hasBroken &&
+            formationData != null &&
+            formationData.behavior != FormationData.FormationBehavior.IndividualPathsAfterBreak)
         {
             pos += (Vector3)formationOffset;
         }
 
         transform.position = pos;
     }
+
 
     private void DoBreak()
     {

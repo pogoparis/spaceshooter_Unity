@@ -1,64 +1,65 @@
+using System;
 using UnityEngine;
 
-[DisallowMultipleComponent]
-public class EnemyRouteFollower : MonoBehaviour
+public sealed class EnemyRouteFollower : MonoBehaviour
 {
-    [SerializeField] private EnemyRouteSO route;
+    [Header("Route (runtime)")]
+    [SerializeField] EnemyRouteSO route;
+    [SerializeField] bool snapToFirstNode = true;
 
-    private Vector3 basePos;
-    private int index;
-    private float pauseTimer;
-    private bool finished;
-    private bool paused;
-    private Camera cam;
+    [Header("Debug")]
+    [SerializeField] bool drawGizmos = false;
+    [SerializeField] Color gizmoColor = Color.cyan;
 
-    public bool HasRoute => route != null && route.IsValid && !finished;
+    public event Action<int, string> OnNodeReached;
+    public event Action OnRouteFinished;
 
-    public void SetPaused(bool value) => paused = value;
+    Vector3 basePos;
+    int index;
+    float pauseTimer;
+    bool hasRoute;
 
-    public void RebaseToCurrentPosition()
-    {
-        basePos = transform.position;
-    }
-
-    private void Awake()
-    {
-        cam = Camera.main;
-    }
+    public bool HasRoute => hasRoute && route != null && route.IsValid;
 
     public void ApplyRoute(EnemyRouteSO newRoute)
     {
         route = newRoute;
-        finished = false;
-        pauseTimer = 0f;
-        basePos = transform.position;
+        if (route == null || !route.IsValid)
+        {
+            ClearRoute();
+            return;
+        }
 
-        if (route != null && route.IsValid)
+        hasRoute = true;
+        basePos = transform.position;
+        index = 0;
+        pauseTimer = 0f;
+
+        if (snapToFirstNode)
         {
-            transform.position = ResolvePoint(route.nodes[0]);
-            index = 1;
+            transform.position = ResolveWorld(route.nodes[0], basePos, transform.position.z);
         }
-        else
-        {
-            index = 0;
-        }
+
+        // Consider node 0 reached immediately.
+        var n0 = route.nodes[0];
+        pauseTimer = Mathf.Max(0f, n0.pause);
+        if (!string.IsNullOrEmpty(n0.actionId))
+            OnNodeReached?.Invoke(0, n0.actionId);
+
+        index = 1;
     }
 
     public void ClearRoute()
     {
         route = null;
-        finished = false;
-        pauseTimer = 0f;
+        hasRoute = false;
         index = 0;
+        pauseTimer = 0f;
     }
 
-    private void Update()
+    void Update()
     {
-        if (paused) return;
         if (!HasRoute) return;
-
-        var fm = GetComponent<EnemyFormationMember>();
-        if (fm != null && (fm.isFlyingIn || fm.inFormation)) return;
 
         if (pauseTimer > 0f)
         {
@@ -66,52 +67,96 @@ public class EnemyRouteFollower : MonoBehaviour
             return;
         }
 
-        if (index < 0 || index >= route.nodes.Count)
+        if (index >= route.nodes.Count)
         {
-            finished = true;
+            HandleRouteEnd();
             return;
         }
 
-        Vector3 target = ResolvePoint(route.nodes[index]);
-        float spd = Mathf.Max(0.01f, route.nodes[index].speed);
+        var node = route.nodes[index];
+        Vector3 target = ResolveWorld(node, basePos, transform.position.z);
+        float speed = Mathf.Max(0.01f, node.speed);
 
-        transform.position = Vector3.MoveTowards(transform.position, target, spd * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
 
-        if ((transform.position - target).sqrMagnitude <= 0.0001f)
+        if ((transform.position - target).sqrMagnitude <= 0.000001f)
         {
-            pauseTimer = Mathf.Max(0f, route.nodes[index].pause);
+            if (!string.IsNullOrEmpty(node.actionId))
+                OnNodeReached?.Invoke(index, node.actionId);
+
+            pauseTimer = Mathf.Max(0f, node.pause);
             index++;
-
-            if (index >= route.nodes.Count)
-            {
-                if (route.loop)
-                {
-                    index = 0;
-                }
-                else
-                {
-                    switch (route.endMode)
-                    {
-                        case EnemyRouteSO.EndMode.StopHere:
-                            finished = true;
-                            break;
-
-                        case EnemyRouteSO.EndMode.Despawn:
-                            gameObject.SetActive(false);
-                            break;
-
-                        default:
-                            ClearRoute();
-                            break;
-                    }
-                }
-            }
         }
     }
 
-    private Vector3 ResolvePoint(EnemyRouteSO.RouteNode node)
+    void HandleRouteEnd()
     {
-        if (cam == null) cam = Camera.main;
-        return route.ResolvePoint(node, basePos, transform.position.z, cam);
+        if (route == null)
+        {
+            ClearRoute();
+            return;
+        }
+
+        if (route.loop)
+        {
+            index = 0;
+
+            var n0 = route.nodes[0];
+            if (!string.IsNullOrEmpty(n0.actionId))
+                OnNodeReached?.Invoke(0, n0.actionId);
+
+            pauseTimer = Mathf.Max(0f, n0.pause);
+            index = 1;
+            return;
+        }
+
+        var mode = route.endMode;
+        OnRouteFinished?.Invoke();
+        ClearRoute();
+
+        if (mode == EnemyRouteSO.EndMode.Despawn)
+            gameObject.SetActive(false);
+    }
+
+    Vector3 ResolveWorld(EnemyRouteSO.RouteNode node, Vector3 spawnPos, float z)
+    {
+        if (route != null && route.useViewportPoints)
+        {
+            var cam = Camera.main;
+            if (cam == null)
+                return new Vector3(node.offset.x, node.offset.y, z);
+
+            float depth = Mathf.Abs(z - cam.transform.position.z);
+            var wp = cam.ViewportToWorldPoint(new Vector3(node.offset.x, node.offset.y, depth));
+            wp.z = z;
+            return wp;
+        }
+
+        if (route != null && route.offsetsRelativeToSpawn)
+            return spawnPos + (Vector3)node.offset;
+
+        return new Vector3(node.offset.x, node.offset.y, z);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (!drawGizmos) return;
+        if (route == null || !route.IsValid) return;
+
+        Gizmos.color = gizmoColor;
+
+        Vector3 sp = Application.isPlaying ? basePos : transform.position;
+        float z = transform.position.z;
+
+        Vector3 prev = ResolveWorld(route.nodes[0], sp, z);
+        Gizmos.DrawSphere(prev, 0.15f);
+
+        for (int i = 1; i < route.nodes.Count; i++)
+        {
+            Vector3 p = ResolveWorld(route.nodes[i], sp, z);
+            Gizmos.DrawLine(prev, p);
+            Gizmos.DrawSphere(p, 0.15f);
+            prev = p;
+        }
     }
 }

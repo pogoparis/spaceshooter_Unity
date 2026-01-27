@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -9,7 +10,7 @@ public class Bullet : MonoBehaviour
     public float speed = 14f;
     public float lifeTime = 2.0f;
 
-    // Boost ajouté au tir (ex: quand le joueur descend)
+    // Boost ajoutÃ© au tir (ex: quand le joueur descend)
     float speedBoost = 0f;
 
     BulletPool pool;
@@ -27,10 +28,10 @@ public class Bullet : MonoBehaviour
 
     void OnEnable()
     {
-        // IMPORTANT avec le pooling : reset à chaque réutilisation
+        // IMPORTANT avec le pooling : reset Ã  chaque rÃ©utilisation
         speedBoost = 0f;
 
-        // Recalcule la limite haute (au cas où caméra/zoom change)
+        // Recalcule la limite haute (au cas oÃ¹ camÃ©ra/zoom change)
         var cam = Camera.main;
         if (cam != null)
             topY = cam.transform.position.y + cam.orthographicSize + 1f;
@@ -38,18 +39,18 @@ public class Bullet : MonoBehaviour
             topY = 9999f;
 
         CancelInvoke();
-        Invoke(nameof(ReturnToPool), lifeTime); // sécurité
+        Invoke(nameof(ReturnToPool), lifeTime); // sÃ©curitÃ©
     }
 
     void Update()
     {
         float v = speed + speedBoost;
-        // sécurité : on évite de trop ralentir si boost négatif (normalement on n'en envoie pas)
+        // sÃ©curitÃ© : on Ã©vite de trop ralentir si boost nÃ©gatif (normalement on n'en envoie pas)
         v = Mathf.Max(2f, v);
 
         transform.position += Vector3.up * v * Time.deltaTime;
 
-        // Despawn dès que c'est hors écran
+        // Despawn dÃ¨s que c'est hors Ã©cran
         if (transform.position.y > topY)
             ReturnToPool();
     }
@@ -61,13 +62,17 @@ public class Bullet : MonoBehaviour
         else gameObject.SetActive(false);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent<Enemy>(out var enemy))
+        UnityEngine.Debug.Log("BULLET HIT => " + other.name +
+                  " tag=" + other.tag +
+                  " layer=" + other.gameObject.layer);
+
+        var damageable = other.GetComponentInParent<IDamageable>();
+        if (damageable != null)
         {
-            enemy.TakeHit(damage);
+            damageable.TakeHit(damage);
             ReturnToPool();
         }
     }
-
 }
