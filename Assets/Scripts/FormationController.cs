@@ -111,15 +111,18 @@ public class FormationController : MonoBehaviour
                 int index = r * cols + c;
                 float delay = (index * spawnStagger) + (r * rowStaggerBonus);
 
-                StartCoroutine(DelayedFlyIn(e.transform, spawnPos, targetPos, delay, enemyHalfWidth, enemyHalfHeight));
+                StartCoroutine(DelayedFlyIn(e.transform, spawnPos, targetPos, delay, enemyHalfWidth, enemyHalfHeight, rf));
             }
         }
     }
 
-    private IEnumerator DelayedFlyIn(Transform t, Vector3 start, Vector3 end, float delay, float halfW, float halfH)
+    private IEnumerator DelayedFlyIn(
+      Transform t, Vector3 start, Vector3 end, float delay,
+      float halfW, float halfH, EnemyRouteFollower rf)
     {
         if (delay > 0f) yield return new WaitForSeconds(delay);
         yield return FlyIn(t, start, end, halfW, halfH);
+        if (rf != null) rf.SetPaused(false); // route ON après le fly-in
     }
 
     private IEnumerator FlyIn(Transform t, Vector3 start, Vector3 end, float halfW, float halfH)

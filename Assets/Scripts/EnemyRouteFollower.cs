@@ -12,6 +12,9 @@ public class EnemyRouteFollower : MonoBehaviour
 
     public bool HasRoute => route != null && route.IsValid && !finished;
 
+    private bool paused;
+    public void SetPaused(bool value) => paused = value;
+
     public void ApplyRoute(EnemyRouteSO newRoute)
     {
         route = newRoute;
@@ -90,10 +93,7 @@ public class EnemyRouteFollower : MonoBehaviour
 
     private Vector3 ResolvePoint(EnemyRouteSO.RouteNode node)
     {
-        if (route.offsetsRelativeToSpawn)
-            return basePos + (Vector3)node.offset;
-
-        // mode world position (x,y)
-        return new Vector3(node.offset.x, node.offset.y, transform.position.z);
+        // basePos est déjà ton spawn world pos (tu le set dans ApplyRoute)
+        return route.ResolvePoint(node, basePos, transform.position.z, Camera.main);
     }
 }
