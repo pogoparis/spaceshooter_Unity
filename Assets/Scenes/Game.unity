@@ -184,7 +184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &96160746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,6 +391,8 @@ MonoBehaviour:
   zPlane: 0
   edgePadding: 0.15
   clampDuringFlyIn: 1
+  disableEnemyScriptDuringFlyIn: 1
+  pauseRouteDuringFlyIn: 1
 --- !u!4 &338907380
 Transform:
   m_ObjectHideFlags: 0
@@ -865,7 +867,27 @@ MonoBehaviour:
       startDelay: 0
       spawnInterval: 0.35
       waitForClear: 1
-      cols: 0
+      cols: 5
+      overrideFormationSettings: 0
+      flyInDuration: 1.2
+      arcSideOffset: 2
+      arcDownAmount: 4
+      spawnStagger: 0.12
+      rowStaggerBonus: 0.25
+      spawnTimeout: 10
+      clearTimeout: 50
+  - name: Wave 3
+    startDelay: 5
+    phases:
+    - route: {fileID: 11400000, guid: fea115b08d5dde84b86e84448eb51a20, type: 2}
+      name: wave3-phase1
+      style: 1
+      enemyPrefab: {fileID: 4002148140208487566, guid: 05d48fcd4d992ff46ba3d132fa3ea0a6, type: 3}
+      count: 10
+      startDelay: 0
+      spawnInterval: 0.35
+      waitForClear: 0
+      cols: 4
       overrideFormationSettings: 0
       flyInDuration: 1.2
       arcSideOffset: 2
