@@ -4,6 +4,7 @@ public class WaveTrackedEnemy : MonoBehaviour
 {
     WaveManager manager;
     bool notified;
+   
 
     public void Init(WaveManager m)
     {
@@ -11,17 +12,17 @@ public class WaveTrackedEnemy : MonoBehaviour
         notified = false;
     }
 
-    void OnDisable()
+  public  void OnDisable()
     {
         NotifyGone();
     }
 
-    void OnDestroy()
+   public void OnDestroy()
     {
         NotifyGone();
     }
 
-    void NotifyGone()
+   public void NotifyGone()
     {
         if (notified) return;
         notified = true;
