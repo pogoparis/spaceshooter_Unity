@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dd6d52bdcec63b4ab06b30c1756d18c, type: 3}
+  m_Name: FORM_Line_5
+  m_EditorClassIdentifier: Assembly-CSharp::FormationData
+  formationName: StraightDown
+  enemyPrefab: {fileID: 4002148140208487566, guid: 05d48fcd4d992ff46ba3d132fa3ea0a6, type: 3}
+  enemyCount: 5
+  spawnDelayBetweenEnemies: 0.2
+  pathTemplate: {fileID: 11400000, guid: d04b78c5badcc6349a592b7262b4f788, type: 2}
+  layoutType: 1
+  customOffsets:
+  - {x: 0, y: 0}
+  - {x: -0.6, y: 0}
+  - {x: -1.2, y: 0}
+  - {x: 0.6, y: 0}
+  - {x: 1.2, y: 0}
+  lineSpacing: 0.6
+  gridCols: 5
+  gridColSpacing: 0.8
+  gridRowSpacing: 0.8
+  circleRadius: 1.2
+  behavior: 0
+  breakAfterSeconds: 2
+  breakAtWaypointIndex: 1
+  individualPaths: []
