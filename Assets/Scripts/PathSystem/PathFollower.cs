@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PathFollower : MonoBehaviour
 {
@@ -82,7 +82,7 @@ public class PathFollower : MonoBehaviour
             formationData != null &&
             formationData.behavior != FormationData.FormationBehavior.IndividualPathsAfterBreak)
 
-        transform.position = pos;
+            transform.position = pos;
     }
 
 
@@ -90,7 +90,7 @@ public class PathFollower : MonoBehaviour
     {
         hasBroken = true;
 
-        // Option: chacun r�cup�re son propre chemin
+        // Option: chacun récupère son propre chemin
         if (formationData != null &&
             formationData.behavior == FormationData.FormationBehavior.IndividualPathsAfterBreak &&
             formationData.individualPaths != null &&
@@ -115,41 +115,63 @@ public class PathFollower : MonoBehaviour
         return waypointIndex / (float)(count - 1);
     }
 
-    private void OnDrawGizmosSelected()
+
+// =======================
+// GIZMOS DEBUG (SAFE)
+// =======================
+private void OnDrawGizmosSelected()
     {
-        if (currentPath == null) return;
+        if (currentPath == null)
+            return;
 
         Camera cam = Camera.main;
-        if (cam == null) return;
+        if (cam == null)
+            return;
 
+        float z = transform.position.z;
+
+        // ----- LIGNE DU CHEMIN -----
         Gizmos.color = currentPath.previewColor;
 
-        const int STEPS = 32;
-        Vector3 prev = currentPath.Evaluate(0f, cam, transform.position.z);
+        const int STEPS = 40;
+        Vector3 prev = currentPath.Evaluate(0f, cam, z);
 
         for (int i = 1; i <= STEPS; i++)
         {
             float t = i / (float)STEPS;
-            Vector3 p = currentPath.Evaluate(t, cam, transform.position.z);
+            Vector3 p = currentPath.Evaluate(t, cam, z);
             Gizmos.DrawLine(prev, p);
             prev = p;
         }
 
-        // Waypoints (sans labels)
-        if (currentPath.waypoints != null)
+        // ----- WAYPOINTS & DIRECTION -----
+        if (currentPath.waypoints != null && currentPath.waypoints.Count > 0)
         {
-            for (int i = 0; i < currentPath.waypoints.Count; i++)
-            {
-                float t = (currentPath.waypoints.Count <= 1)
-                    ? 0f
-                    : i / (float)(currentPath.waypoints.Count - 1);
+            int count = currentPath.waypoints.Count;
 
-                Vector3 wp = currentPath.Evaluate(t, cam, transform.position.z);
-                Gizmos.DrawSphere(wp, 0.08f);
+            for (int i = 0; i < count; i++)
+            {
+                float t = (count <= 1) ? 0f : i / (float)(count - 1);
+                Vector3 wp = currentPath.Evaluate(t, cam, z);
+
+                // Couleur dégradée (début - fin)
+                Gizmos.color = Color.Lerp(Color.green, Color.red, t);
+
+                // Taille légèrement progressive
+                float size = Mathf.Lerp(0.06f, 0.11f, t);
+                Gizmos.DrawSphere(wp, size);
+
+                // Petit trait vers le prochain point (sens du chemin)
+                if (i < count - 1)
+                {
+                    float tNext = (count <= 1) ? 0f : (i + 1) / (float)(count - 1);
+                    Vector3 next = currentPath.Evaluate(tNext, cam, z);
+                    Vector3 dir = (next - wp).normalized;
+
+                    Gizmos.DrawLine(wp, wp + dir * 0.25f);
+                }
             }
         }
+
     }
-
-
-
 }
