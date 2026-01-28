@@ -9,12 +9,11 @@ public class WaveManagerV2 : MonoBehaviour
 
     [Header("Refs")]
     public FormationSpawner formationSpawner;
-    public Transform enemyContainer;
 
     [Header("Flow")]
     public float timeBetweenWaves = 2f;
 
-    int currentWaveIndex = 0;
+    private int currentWaveIndex = 0;
 
     void Start()
     {
@@ -47,9 +46,10 @@ public class WaveManagerV2 : MonoBehaviour
         {
             timer += Time.deltaTime;
 
-            while (spawnIndex < spawns.Count && timer >= spawns[spawnIndex].spawnTime)
+            while (spawnIndex < spawns.Count &&
+                   timer >= spawns[spawnIndex].spawnTime)
             {
-                SpawnFormation(spawns[spawnIndex]);
+                TriggerFormationSpawn(spawns[spawnIndex]);
                 spawnIndex++;
             }
 
@@ -57,14 +57,15 @@ public class WaveManagerV2 : MonoBehaviour
         }
     }
 
-    void SpawnFormation(WaveData.FormationSpawn spawn)
+    private void TriggerFormationSpawn(WaveData.FormationSpawn spawn)
     {
         if (spawn.formation == null || formationSpawner == null)
             return;
 
-        for (int i = 0; i < spawn.repeatCount; i++)
-        {
-            formationSpawner.SpawnFormation(spawn.formation);
-        }
+        formationSpawner.SpawnFormation(
+            spawn.formation,
+            spawn.repeatCount,
+            spawn.repeatDelay
+        );
     }
 }

@@ -42,4 +42,74 @@ public class FormationData : ScriptableObject
 
     [Header("Individual Paths After Break")]
     public List<PathData> individualPaths = new();
+
+    // =====================================================
+    // OFFSET LOGIC — SINGLE SOURCE OF TRUTH (PDF)
+    // =====================================================
+    public Vector2 GetOffset(int index)
+    {
+        switch (layoutType)
+        {
+            case LayoutType.CustomOffsets:
+                return GetCustomOffset(index);
+
+            case LayoutType.Line:
+                return GetLineOffset(index);
+
+            case LayoutType.Grid:
+                return GetGridOffset(index);
+
+            case LayoutType.Circle:
+                return GetCircleOffset(index);
+        }
+
+        return Vector2.zero;
+    }
+
+    // ---------------- CUSTOM ----------------
+    Vector2 GetCustomOffset(int index)
+    {
+        if (customOffsets == null || customOffsets.Count == 0)
+            return Vector2.zero;
+
+        if (index < 0 || index >= customOffsets.Count)
+            return Vector2.zero;
+
+        return customOffsets[index];
+    }
+
+    // ---------------- LINE ----------------
+    Vector2 GetLineOffset(int index)
+    {
+        float half = (enemyCount - 1) * 0.5f;
+        float x = (index - half) * lineSpacing;
+        return new Vector2(x, 0f);
+    }
+
+    // ---------------- GRID ----------------
+    Vector2 GetGridOffset(int index)
+    {
+        if (gridCols <= 0) gridCols = 1;
+
+        int col = index % gridCols;
+        int row = index / gridCols;
+
+        float x = col * gridColSpacing;
+        float y = -row * gridRowSpacing;
+
+        return new Vector2(x, y);
+    }
+
+    // ---------------- CIRCLE ----------------
+    Vector2 GetCircleOffset(int index)
+    {
+        if (enemyCount <= 0)
+            return Vector2.zero;
+
+        float angle = (index / (float)enemyCount) * Mathf.PI * 2f;
+        float x = Mathf.Cos(angle) * circleRadius;
+        float y = Mathf.Sin(angle) * circleRadius;
+
+        return new Vector2(x, y);
+    }
 }

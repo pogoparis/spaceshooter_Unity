@@ -1,105 +1,79 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FormationSpawner : MonoBehaviour
 {
+    [Header("Refs")]
     public Transform enemyContainer;
-    public Camera gameplayCamera;
+    public Camera mainCamera;
 
-    public List<GameObject> SpawnFormation(FormationData formation)
+    void Awake()
     {
-        var spawned = new List<GameObject>();
+        if (mainCamera == null)
+            mainCamera = Camera.main;
+    }
 
-        if (formation == null || formation.enemyPrefab == null || formation.pathTemplate == null)
-            return spawned;
+    // === APPELÉ PAR WaveManager ===
+    public void SpawnFormation(
+        FormationData formation,
+        int repeatCount,
+        float repeatDelay
+    )
+    {
+        StartCoroutine(SpawnFormationRoutine(
+            formation,
+            repeatCount,
+            repeatDelay
+        ));
+    }
 
-        for (int i = 0; i < formation.enemyCount; i++)
+    // === GÈRE LES RÉPÉTITIONS (PDF) ===
+    private IEnumerator SpawnFormationRoutine(
+        FormationData formation,
+        int repeatCount,
+        float repeatDelay
+    )
+    {
+        for (int i = 0; i < repeatCount; i++)
         {
-            // 1️ Calcul de l’offset de formation (UNE FOIS)
-            Vector2 offset = ComputeOffset(formation, i);
+            SpawnFormationOnce(formation);
 
-            // 2️ Instanciation
-            GameObject enemy = Instantiate(formation.enemyPrefab);
-            enemy.transform.SetParent(enemyContainer, worldPositionStays: true);
+            if (i < repeatCount - 1 && repeatDelay > 0f)
+                yield return new WaitForSeconds(repeatDelay);
+        }
+    }
 
-            // 3️ Application de l’offset UNE SEULE FOIS
-            enemy.transform.position += (Vector3)offset;
+    // === SPAWN RÉEL DES ENNEMIS ===
+    private void SpawnFormationOnce(FormationData formation)
+    {
+        if (formation.enemyPrefab == null ||
+            formation.pathTemplate == null)
+            return;
 
-            // 4️ Désactivation temporaire (spawn delay)
-            enemy.SetActive(false);
+        int count = formation.enemyCount;
 
-            // 5️ Configuration du PathFollower (SANS offset)
-            PathFollower follower = enemy.GetComponent<PathFollower>();
-            if (follower == null)
-                follower = enemy.AddComponent<PathFollower>();
+        for (int i = 0; i < count; i++)
+        {
+            Vector2 offset = formation.GetOffset(i);
 
-            follower.Configure(
-                formation.pathTemplate,
-                formation,
-                Vector2.zero,   //  plus jamais d’offset ici
-                i,
-                gameplayCamera
+            GameObject enemy = Instantiate(
+                formation.enemyPrefab,
+                Vector3.zero,
+                Quaternion.identity,
+                enemyContainer
             );
 
-            spawned.Add(enemy);
-
-
-            float delay = formation.pathTemplate.spawnDelayBetweenEnemies * i;
-            StartCoroutine(EnableAfterDelay(enemy, delay));
-
-
-        }
-
-        return spawned;
-    }
-
-    private IEnumerator EnableAfterDelay(GameObject go, float delay)
-    {
-        if (delay > 0f)
-            yield return new WaitForSeconds(delay);
-
-        if (go != null)
-            go.SetActive(true);
-    }
-
-    private static Vector2 ComputeOffset(FormationData f, int i)
-    {
-        switch (f.layoutType)
-        {
-            case FormationData.LayoutType.CustomOffsets:
-                if (f.customOffsets != null && i < f.customOffsets.Count)
-                    return f.customOffsets[i];
-                return Vector2.zero;
-
-            case FormationData.LayoutType.Line:
-                return new Vector2(
-                    (i - (f.enemyCount - 1) * 0.5f) * f.lineSpacing,
-                    0f
+            PathFollower pf = enemy.GetComponent<PathFollower>();
+            if (pf != null)
+            {
+                pf.Configure(
+                    formation.pathTemplate,
+                    formation,
+                    offset,
+                    i,
+                    mainCamera
                 );
-
-            case FormationData.LayoutType.Grid:
-                {
-                    int cols = Mathf.Max(1, f.gridCols);
-                    int row = i / cols;
-                    int col = i % cols;
-
-                    float x = (col - (cols - 1) * 0.5f) * f.gridColSpacing;
-                    float y = -(row * f.gridRowSpacing);
-                    return new Vector2(x, y);
-                }
-
-            case FormationData.LayoutType.Circle:
-                {
-                    if (f.enemyCount <= 1)
-                        return Vector2.zero;
-
-                    float angle = (i / (float)f.enemyCount) * Mathf.PI * 2f;
-                    return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * f.circleRadius;
-                }
-
-            default:
-                return Vector2.zero;
+            }
         }
     }
 }

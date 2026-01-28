@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1849543210759898064}
   - component: {fileID: 236190173397002419}
   - component: {fileID: 6237004509011024204}
-  - component: {fileID: 7551200757638718392}
   - component: {fileID: 6602274086884903424}
   m_Layer: 6
   m_Name: BossBoomBoxKing
@@ -140,22 +139,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.0001, y: 0.0001}
   m_EdgeRadius: 0
---- !u!114 &7551200757638718392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 699759535521447248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ff7b8f5c09611a4cbeaee43007c7ed1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyRouteFollower
-  route: {fileID: 0}
-  snapToFirstNode: 1
-  drawGizmos: 0
-  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!114 &6602274086884903424
 MonoBehaviour:
   m_ObjectHideFlags: 0
