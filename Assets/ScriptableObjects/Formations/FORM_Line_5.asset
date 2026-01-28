@@ -16,7 +16,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 4002148140208487566, guid: 05d48fcd4d992ff46ba3d132fa3ea0a6, type: 3}
   enemyCount: 5
   spawnDelayBetweenEnemies: 0.4
-  pathTemplate: {fileID: 11400000, guid: d04b78c5badcc6349a592b7262b4f788, type: 2}
+  pathTemplate: {fileID: 11400000, guid: 9a6a4036eb3b13247940a850e05fa481, type: 2}
   layoutType: 1
   customOffsets:
   - {x: 0, y: 0}
