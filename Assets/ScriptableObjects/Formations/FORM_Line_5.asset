@@ -15,7 +15,7 @@ MonoBehaviour:
   formationName: StraightDown
   enemyPrefab: {fileID: 4002148140208487566, guid: 05d48fcd4d992ff46ba3d132fa3ea0a6, type: 3}
   enemyCount: 5
-  spawnDelayBetweenEnemies: 0.2
+  spawnDelayBetweenEnemies: 0.4
   pathTemplate: {fileID: 11400000, guid: d04b78c5badcc6349a592b7262b4f788, type: 2}
   layoutType: 1
   customOffsets:
@@ -24,7 +24,7 @@ MonoBehaviour:
   - {x: -1.2, y: 0}
   - {x: 0.6, y: 0}
   - {x: 1.2, y: 0}
-  lineSpacing: 0.6
+  lineSpacing: 3
   gridCols: 5
   gridColSpacing: 0.8
   gridRowSpacing: 0.8

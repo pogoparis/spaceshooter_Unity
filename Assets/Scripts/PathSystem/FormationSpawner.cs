@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,21 +10,41 @@ public class FormationSpawner : MonoBehaviour
     public List<GameObject> SpawnFormation(FormationData formation)
     {
         var spawned = new List<GameObject>();
-        if (formation == null || formation.enemyPrefab == null || formation.pathTemplate == null) return spawned;
+
+        if (formation == null || formation.enemyPrefab == null || formation.pathTemplate == null)
+            return spawned;
 
         for (int i = 0; i < formation.enemyCount; i++)
         {
-            var enemy = Instantiate(formation.enemyPrefab, enemyContainer);
-            enemy.SetActive(false); // on active avec un d�lai
-
-            var follower = enemy.GetComponent<PathFollower>();
-            if (follower == null) follower = enemy.AddComponent<PathFollower>();
-
+            // 1️ Calcul de l’offset de formation (UNE FOIS)
             Vector2 offset = ComputeOffset(formation, i);
-            follower.Configure(formation.pathTemplate, formation, offset, i, gameplayCamera);
+
+            // 2️ Instanciation
+            GameObject enemy = Instantiate(formation.enemyPrefab);
+            enemy.transform.SetParent(enemyContainer, worldPositionStays: true);
+
+            // 3️ Application de l’offset UNE SEULE FOIS
+            enemy.transform.position += (Vector3)offset;
+
+            // 4️ Désactivation temporaire (spawn delay)
+            enemy.SetActive(false);
+
+            // 5️ Configuration du PathFollower (SANS offset)
+            PathFollower follower = enemy.GetComponent<PathFollower>();
+            if (follower == null)
+                follower = enemy.AddComponent<PathFollower>();
+
+            follower.Configure(
+                formation.pathTemplate,
+                formation,
+                Vector2.zero,   //  plus jamais d’offset ici
+                i,
+                gameplayCamera
+            );
 
             spawned.Add(enemy);
 
+            // 6️⃣ Activation différée
             float delay = formation.spawnDelayBetweenEnemies * i;
             StartCoroutine(EnableAfterDelay(enemy, delay));
         }
@@ -34,8 +54,11 @@ public class FormationSpawner : MonoBehaviour
 
     private IEnumerator EnableAfterDelay(GameObject go, float delay)
     {
-        if (delay > 0f) yield return new WaitForSeconds(delay);
-        if (go != null) go.SetActive(true);
+        if (delay > 0f)
+            yield return new WaitForSeconds(delay);
+
+        if (go != null)
+            go.SetActive(true);
     }
 
     private static Vector2 ComputeOffset(FormationData f, int i)
@@ -43,11 +66,15 @@ public class FormationSpawner : MonoBehaviour
         switch (f.layoutType)
         {
             case FormationData.LayoutType.CustomOffsets:
-                if (f.customOffsets != null && i < f.customOffsets.Count) return f.customOffsets[i];
+                if (f.customOffsets != null && i < f.customOffsets.Count)
+                    return f.customOffsets[i];
                 return Vector2.zero;
 
             case FormationData.LayoutType.Line:
-                return new Vector2((i - (f.enemyCount - 1) * 0.5f) * f.lineSpacing, 0f);
+                return new Vector2(
+                    (i - (f.enemyCount - 1) * 0.5f) * f.lineSpacing,
+                    0f
+                );
 
             case FormationData.LayoutType.Grid:
                 {
@@ -62,9 +89,11 @@ public class FormationSpawner : MonoBehaviour
 
             case FormationData.LayoutType.Circle:
                 {
-                    if (f.enemyCount <= 1) return Vector2.zero;
-                    float a = (i / (float)f.enemyCount) * Mathf.PI * 2f;
-                    return new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * f.circleRadius;
+                    if (f.enemyCount <= 1)
+                        return Vector2.zero;
+
+                    float angle = (i / (float)f.enemyCount) * Mathf.PI * 2f;
+                    return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * f.circleRadius;
                 }
 
             default:

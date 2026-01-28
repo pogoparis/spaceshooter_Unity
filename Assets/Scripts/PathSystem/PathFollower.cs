@@ -81,9 +81,6 @@ public class PathFollower : MonoBehaviour
         if (!hasBroken &&
             formationData != null &&
             formationData.behavior != FormationData.FormationBehavior.IndividualPathsAfterBreak)
-        {
-            pos += (Vector3)formationOffset;
-        }
 
         transform.position = pos;
     }
