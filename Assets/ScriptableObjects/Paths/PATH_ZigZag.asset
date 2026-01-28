@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c412d48841bfc144b884d9471668bca4, type: 3}
   m_Name: PATH_ZigZag
   m_EditorClassIdentifier: Assembly-CSharp::PathData
+  spawnDelayBetweenEnemies: 0.3
   pathName: New Path
   previewColor: {r: 1, g: 0, b: 1, a: 1}
   pathType: 0
@@ -26,7 +27,7 @@ MonoBehaviour:
     speedMultiplier: 0.1
     pauseDuration: 0
   - position: {x: 0.98, y: 0.6}
-    speedMultiplier: 0
+    speedMultiplier: 0.1
     pauseDuration: 0
   - position: {x: 0.05, y: 0.35}
     speedMultiplier: 0
@@ -34,10 +35,13 @@ MonoBehaviour:
   - position: {x: 0.5, y: -0.1}
     speedMultiplier: 0
     pauseDuration: 0
-  circleCenter: {x: 0.5, y: 1.1}
+  - position: {x: 0.5, y: -0.1}
+    speedMultiplier: 0
+    pauseDuration: 0
+  circleCenter: {x: 0.95, y: 0.15}
   circleRadius: 0.2
   circleStartAngleDeg: 180
   circleEndAngleDeg: 360
   sineAmplitude: 0.1
-  sineFrequency: 2
+  sineFrequency: 3
   sineOnX: 1

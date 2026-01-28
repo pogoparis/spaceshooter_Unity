@@ -3,56 +3,44 @@
   "WorkspaceRootPath": "D:\\UnityProject\\spaceshooter2D\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyRouteFollower.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\EnemyRouteFollower.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\FormationSpawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\PathSystem\\FormationSpawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyRouteSO.c.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\EnemyRouteSO.c.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\FormationController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\FormationController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\WaveManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\WaveManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\FormationData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\PathSystem\\FormationData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\PathData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\PathSystem\\PathData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Editors\\EnemyRoutePackCreator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Editors\\EnemyRoutePackCreator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\PathFollower.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\PathSystem\\PathFollower.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\WaveManagerV2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\PathSystem\\WaveManagerV2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\WaveData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\PathSystem\\WaveData.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\Boss\\BossBoomBoxKing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Boss\\BossBoomBoxKing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\Enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyRouteFollower.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\EnemyRouteFollower.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemySpawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\EnemySpawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\WaveTrackedEnemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\WaveTrackedEnemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PlayerController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\PlayerController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyFormationMember.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\EnemyFormationMember.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\Bullet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\Bullet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\BulletPool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\BulletPool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -66,80 +54,111 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
+              "Title": "FormationData.cs",
+              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\FormationData.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PathSystem\\FormationData.cs",
+              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\FormationData.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PathSystem\\FormationData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-28T01:43:25.118Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "PathData.cs",
               "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\PathData.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\PathSystem\\PathData.cs",
               "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\PathData.cs",
               "RelativeToolTip": "Assets\\Scripts\\PathSystem\\PathData.cs",
-              "ViewState": "AgIAAJIAAAAAAAAAAAAowK0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-27T00:18:58.969Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "EnemyRoutePackCreator.cs",
-              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Editors\\EnemyRoutePackCreator.cs",
-              "RelativeDocumentMoniker": "Assets\\Editors\\EnemyRoutePackCreator.cs",
-              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Editors\\EnemyRoutePackCreator.cs",
-              "RelativeToolTip": "Assets\\Editors\\EnemyRoutePackCreator.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAtwE8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-26T23:37:37.726Z"
+              "WhenOpened": "2026-01-27T00:18:58.969Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "FormationSpawner.cs",
+              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\FormationSpawner.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PathSystem\\FormationSpawner.cs",
+              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\FormationSpawner.cs*",
+              "RelativeToolTip": "Assets\\Scripts\\PathSystem\\FormationSpawner.cs*",
+              "ViewState": "AgIAABcAAAAAAAAAAAAowCkAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-28T00:05:16.235Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WaveManagerV2.cs",
+              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\WaveManagerV2.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PathSystem\\WaveManagerV2.cs",
+              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\WaveManagerV2.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PathSystem\\WaveManagerV2.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAowEQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-28T00:04:27.584Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "WaveData.cs",
+              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\WaveData.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PathSystem\\WaveData.cs",
+              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\WaveData.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PathSystem\\WaveData.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAowB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T23:55:02.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PathFollower.cs",
+              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\PathFollower.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PathSystem\\PathFollower.cs",
+              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PathSystem\\PathFollower.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PathSystem\\PathFollower.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAowFIAAABgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T23:22:11.356Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BossBoomBoxKing.cs",
+              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\Boss\\BossBoomBoxKing.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Boss\\BossBoomBoxKing.cs",
+              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\Boss\\BossBoomBoxKing.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Boss\\BossBoomBoxKing.cs",
+              "ViewState": "AgIAAJgBAAAAAAAAAAAowLMBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-27T22:02:15.643Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "EnemyRouteFollower.cs",
               "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyRouteFollower.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\EnemyRouteFollower.cs",
               "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyRouteFollower.cs",
               "RelativeToolTip": "Assets\\Scripts\\EnemyRouteFollower.cs",
-              "ViewState": "AgIAAFoAAAAAAAAAAAAqwHUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAowKIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-26T22:47:06.163Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EnemyRouteSO.c.cs",
-              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyRouteSO.c.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\EnemyRouteSO.c.cs",
-              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyRouteSO.c.cs",
-              "RelativeToolTip": "Assets\\Scripts\\EnemyRouteSO.c.cs",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAowDgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-26T22:46:26.733Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "FormationController.cs",
-              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\FormationController.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\FormationController.cs",
-              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\FormationController.cs",
-              "RelativeToolTip": "Assets\\Scripts\\FormationController.cs",
-              "ViewState": "AgIAAL8AAAAAAAAAAAAowNoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T21:30:28.989Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "EnemyFormationMember.cs",
-              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyFormationMember.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\EnemyFormationMember.cs",
-              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemyFormationMember.cs",
-              "RelativeToolTip": "Assets\\Scripts\\EnemyFormationMember.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T21:29:56.131Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "EnemySpawner.cs",
               "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\EnemySpawner.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\EnemySpawner.cs",
@@ -151,75 +170,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Enemy.cs",
               "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\Enemy.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Enemy.cs",
               "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\Enemy.cs",
               "RelativeToolTip": "Assets\\Scripts\\Enemy.cs",
-              "ViewState": "AgIAAEwAAAAAAAAAAAAowFgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T21:06:45.805Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "WaveManager.cs",
-              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\WaveManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\WaveManager.cs",
-              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\WaveManager.cs",
-              "RelativeToolTip": "Assets\\Scripts\\WaveManager.cs",
-              "ViewState": "AgIAAOcAAAAAAAAAAAAowAIBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-23T00:40:26.043Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "WaveTrackedEnemy.cs",
-              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\WaveTrackedEnemy.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\WaveTrackedEnemy.cs",
-              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\WaveTrackedEnemy.cs",
-              "RelativeToolTip": "Assets\\Scripts\\WaveTrackedEnemy.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAowCAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-23T00:39:51.355Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "PlayerController.cs",
-              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PlayerController.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\PlayerController.cs",
-              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\PlayerController.cs",
-              "RelativeToolTip": "Assets\\Scripts\\PlayerController.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAowDIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T19:22:02.524Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "BulletPool.cs",
-              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\BulletPool.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\BulletPool.cs",
-              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\BulletPool.cs",
-              "RelativeToolTip": "Assets\\Scripts\\BulletPool.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T19:20:54.337Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Bullet.cs",
-              "DocumentMoniker": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\Bullet.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Bullet.cs",
-              "ToolTip": "D:\\UnityProject\\spaceshooter2D\\Assets\\Scripts\\Bullet.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Bullet.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAAEMAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-22T19:19:51.399Z"
+              "WhenOpened": "2026-01-22T21:06:45.805Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -10,17 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c412d48841bfc144b884d9471668bca4, type: 3}
-  m_Name: PATH_StraightDown
+  m_Name: PATH_ZigZag_Bezier
   m_EditorClassIdentifier: Assembly-CSharp::PathData
-  defaultSpawnDelay: 0.25
-  pathName: Linear
+  spawnDelayBetweenEnemies: 0.6
+  defaultSpawnDelay: 2
+  pathName: BezierCubic
   previewColor: {r: 1, g: 0, b: 1, a: 1}
-  pathType: 0
+  pathType: 2
   coordSpace: 1
-  totalDuration: 4
+  totalDuration: 5
   isLooping: 0
   waypoints:
   - position: {x: 0.5, y: 1.1}
+    speedMultiplier: 0
+    pauseDuration: 0
+  - position: {x: 0.05, y: 0.85}
+    speedMultiplier: 0
+    pauseDuration: 0
+  - position: {x: 0.95, y: 0.34}
     speedMultiplier: 0
     pauseDuration: 0
   - position: {x: 0.5, y: -0.1}

@@ -44,9 +44,11 @@ public class FormationSpawner : MonoBehaviour
 
             spawned.Add(enemy);
 
-            // 6️⃣ Activation différée
-            float delay = formation.spawnDelayBetweenEnemies * i;
+
+            float delay = formation.pathTemplate.spawnDelayBetweenEnemies * i;
             StartCoroutine(EnableAfterDelay(enemy, delay));
+
+
         }
 
         return spawned;

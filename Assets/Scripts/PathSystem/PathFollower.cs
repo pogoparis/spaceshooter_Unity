@@ -114,4 +114,42 @@ public class PathFollower : MonoBehaviour
         waypointIndex = Mathf.Clamp(waypointIndex, 0, count - 1);
         return waypointIndex / (float)(count - 1);
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (currentPath == null) return;
+
+        Camera cam = Camera.main;
+        if (cam == null) return;
+
+        Gizmos.color = currentPath.previewColor;
+
+        const int STEPS = 32;
+        Vector3 prev = currentPath.Evaluate(0f, cam, transform.position.z);
+
+        for (int i = 1; i <= STEPS; i++)
+        {
+            float t = i / (float)STEPS;
+            Vector3 p = currentPath.Evaluate(t, cam, transform.position.z);
+            Gizmos.DrawLine(prev, p);
+            prev = p;
+        }
+
+        // Waypoints (sans labels)
+        if (currentPath.waypoints != null)
+        {
+            for (int i = 0; i < currentPath.waypoints.Count; i++)
+            {
+                float t = (currentPath.waypoints.Count <= 1)
+                    ? 0f
+                    : i / (float)(currentPath.waypoints.Count - 1);
+
+                Vector3 wp = currentPath.Evaluate(t, cam, transform.position.z);
+                Gizmos.DrawSphere(wp, 0.08f);
+            }
+        }
+    }
+
+
+
 }

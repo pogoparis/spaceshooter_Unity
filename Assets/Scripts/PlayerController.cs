@@ -1,10 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Move")]
     public float speed = 8f;
-    public float screenPadding = 0.15f; // marge intérieure
+    public float screenPadding = 0.15f; // marge intÃ©rieure (viewport)
 
     [Header("Shoot")]
     public Transform firePoint;
@@ -31,88 +32,99 @@ public class PlayerController : MonoBehaviour
         if (cam == null) cam = Camera.main;
         if (cam == null) return;
 
-        float halfH = cam.orthographicSize;
-        float halfW = halfH * cam.aspect;
+        // Viewport â†’ World bounds
+        Vector3 bl = cam.ViewportToWorldPoint(new Vector3(screenPadding, screenPadding, 0f));
+        Vector3 tr = cam.ViewportToWorldPoint(new Vector3(1f - screenPadding, 1f - screenPadding, 0f));
 
-        // Taille du sprite du player en unités
-        float padX = screenPadding;
-        float padY = screenPadding;
+        minBounds = new Vector2(bl.x, bl.y);
+        maxBounds = new Vector2(tr.x, tr.y);
+    }
 
-        // Mode arcade : on clamp sur le CENTRE (ignorer la taille du sprite)
-        bool clampCenterX = true;
-        bool clampCenterY = true;
+    // -------- INPUT --------
 
-        var sr = GetComponent<SpriteRenderer>();
-        if (sr != null)
+    Vector2 ReadMoveInput()
+    {
+        Vector2 move = Vector2.zero;
+
+        // Clavier
+        if (Keyboard.current != null)
         {
-            if (!clampCenterX) padX += sr.bounds.extents.x; // sprite 100% dans l'écran
-            if (!clampCenterY) padY += sr.bounds.extents.y; // sprite 100% dans l'écran
+            if (Keyboard.current.aKey.isPressed) move.x -= 1f;
+            if (Keyboard.current.dKey.isPressed) move.x += 1f;
+            if (Keyboard.current.wKey.isPressed) move.y += 1f;
+            if (Keyboard.current.sKey.isPressed) move.y -= 1f;
         }
 
-
-        float camX = cam.transform.position.x;
-        float camY = cam.transform.position.y;
-
-        minBounds = new Vector2(camX - halfW + padX, camY - halfH + padY);
-        maxBounds = new Vector2(camX + halfW - padX, camY + halfH - padY);
+        return Vector2.ClampMagnitude(move, 1f);
     }
 
     bool WantsToShoot(Vector3 moveDelta)
     {
-        // PC
-        if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
+        // Clavier
+        if (Keyboard.current != null && Keyboard.current.spaceKey.isPressed)
             return true;
 
-        // Mobile
-        if (Input.touchCount > 0)
+        // Souris
+        if (Mouse.current != null && Mouse.current.leftButton.isPressed)
             return true;
 
-        // Tir quand le joueur BOUGE (mobile-friendly)
+        // Mobile (safe, mÃªme si pas encore utilisÃ©)
+        if (Touchscreen.current != null &&
+            Touchscreen.current.primaryTouch.press.isPressed)
+            return true;
+
+        // Tir automatique quand le joueur bouge
         if (moveDelta.sqrMagnitude > 0.0001f)
             return true;
 
         return false;
     }
 
+    // -------- UPDATE --------
+
     void Update()
     {
-        // Move
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
-        Vector3 delta = new Vector3(x, y, 0f).normalized * speed * Time.deltaTime;
+        // ----- MOVE -----
+        Vector2 move = ReadMoveInput();
+        Vector3 delta = (Vector3)(move * speed * Time.deltaTime);
         transform.position += delta;
 
-        // Clamp écran
+        // Clamp Ã©cran
         Vector3 p = transform.position;
         p.x = Mathf.Clamp(p.x, minBounds.x, maxBounds.x);
         p.y = Mathf.Clamp(p.y, minBounds.y, maxBounds.y);
         transform.position = p;
 
-        // Vitesse verticale (pour booster uniquement quand tu descends)
+        // Vitesse verticale (pour booster les tirs quand on descend)
         float velY = 0f;
         if (Time.deltaTime > 0f)
             velY = (transform.position.y - lastPos.y) / Time.deltaTime;
         lastPos = transform.position;
 
-        //Tir espace
+        // ----- SHOOT -----
         if (Time.time >= nextFireTime && firePoint != null && bulletPool != null)
         {
             if (WantsToShoot(delta))
             {
-                var go = bulletPool.Get();
-                go.transform.position = firePoint.position;
-                go.transform.rotation = Quaternion.identity;
-
-                var b = go.GetComponent<Bullet>();
-                if (b != null)
+                GameObject go = bulletPool.Get();
+                if (go != null)
                 {
-                    float downBoost = (velY < 0f) ? (-velY * inheritDownFactor) : 0f;
-                    b.SetSpeedBoost(downBoost);
-                }
+                    go.transform.position = firePoint.position;
+                    go.transform.rotation = Quaternion.identity;
 
-                nextFireTime = Time.time + fireRate;
+                    Bullet b = go.GetComponent<Bullet>();
+                    if (b != null)
+                    {
+                        float downBoost = (velY < 0f)
+                            ? (-velY * inheritDownFactor)
+                            : 0f;
+
+                        b.SetSpeedBoost(downBoost);
+                    }
+
+                    nextFireTime = Time.time + fireRate;
+                }
             }
         }
-
     }
 }

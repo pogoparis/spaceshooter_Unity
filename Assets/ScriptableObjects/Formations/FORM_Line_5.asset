@@ -12,19 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dd6d52bdcec63b4ab06b30c1756d18c, type: 3}
   m_Name: FORM_Line_5
   m_EditorClassIdentifier: Assembly-CSharp::FormationData
-  formationName: StraightDown
+  formationName: New Formation
   enemyPrefab: {fileID: 4002148140208487566, guid: 05d48fcd4d992ff46ba3d132fa3ea0a6, type: 3}
   enemyCount: 5
-  spawnDelayBetweenEnemies: 0.4
-  pathTemplate: {fileID: 11400000, guid: 9a6a4036eb3b13247940a850e05fa481, type: 2}
+  pathTemplate: {fileID: 11400000, guid: d04b78c5badcc6349a592b7262b4f788, type: 2}
   layoutType: 1
-  customOffsets:
-  - {x: 0, y: 0}
-  - {x: -0.6, y: 0}
-  - {x: -1.2, y: 0}
-  - {x: 0.6, y: 0}
-  - {x: 1.2, y: 0}
-  lineSpacing: 3
+  customOffsets: []
+  lineSpacing: 0.6
   gridCols: 5
   gridColSpacing: 0.8
   gridRowSpacing: 0.8

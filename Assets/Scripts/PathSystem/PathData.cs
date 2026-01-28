@@ -5,8 +5,15 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PathSystem/Path Data", fileName = "PATH_New")]
 public class PathData : ScriptableObject
 {
+
+
+    [Header("Spawn Timing")]
+    [Min(0f)]
+    public float spawnDelayBetweenEnemies = 0.3f;
+
     public enum PathType { Linear, BezierQuadratic, BezierCubic, Circle, SineWave }
     public enum CoordSpace { World, Viewport }
+
 
     [Header("Identity")]
     public string pathName = "New Path";
